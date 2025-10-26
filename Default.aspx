@@ -77,7 +77,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="nav-section">
                     <div class="nav-section-title">Gestión</div>
                     <ul class="nav-menu">
@@ -157,6 +157,18 @@
                             <a href="EstadoAnimal.aspx" class="nav-link">
                                 <i class="fas fa-heartbeat nav-icon"></i>
                                 <span class="nav-text">Estados de Animal</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="CategoriaProductiva.aspx" class="nav-link">
+                                <i class="fas fa-tags nav-icon"></i>
+                                <span class="nav-text">Categorías Productivas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Animal.aspx" class="nav-link">
+                                <i class="fas fa-paw nav-icon"></i>
+                                <span class="nav-text">Animales</span>
                             </a>
                         </li>
                         <li class="nav-item">
