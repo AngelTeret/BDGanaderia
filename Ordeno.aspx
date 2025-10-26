@@ -40,7 +40,7 @@
                 style="width: 100%; border-collapse: collapse;">
                 <Columns>
                     <asp:BoundField DataField="ID_Ordeno" HeaderText="ID" />
-                    <asp:BoundField DataField="ID_Ordenador" HeaderText="ID Ordenador" />
+                    <asp:BoundField DataField="Nombre_Ordenador" HeaderText="Ordenador" />
                     <asp:BoundField DataField="Fecha_Ordeno" HeaderText="Fecha de Ordeño" DataFormatString="{0:dd/MM/yyyy}" />
                     <asp:BoundField DataField="Turno" HeaderText="Turno" />
                     <asp:TemplateField HeaderText="Acciones">
@@ -71,9 +71,9 @@
                 <asp:HiddenField ID="hfOrdenoId" runat="server" />
                 
                 <div class="form-group">
-                    <label class="form-label">ID Ordenador</label>
-                    <asp:TextBox ID="txtIdOrdenador" runat="server" CssClass="form-control" 
-                        placeholder="Ingrese el ID del ordenador" TextMode="Number"></asp:TextBox>
+                    <label class="form-label">Ordenador</label>
+                    <asp:DropDownList ID="ddlOrdenador" runat="server" CssClass="form-control">
+                    </asp:DropDownList>
                 </div>
                 
                 <div class="form-group">
