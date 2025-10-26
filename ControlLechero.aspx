@@ -1,11 +1,11 @@
-<%@ Page Language="VB" AutoEventWireup="true" CodeFile="TipoAnimal.aspx.vb" Inherits="TipoAnimal" ResponseEncoding="utf-8" %>
+<%@ Page Language="VB" AutoEventWireup="true" CodeFile="ControlLechero.aspx.vb" Inherits="ControlLechero" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Tipos de Animal - Sistema Ganadero</title>
+    <title>Gestión de Control Lechero - Sistema Ganadero</title>
     <link href="Content/Site.css" rel="stylesheet" />
     <link href="Content/admin-dashboard.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -24,7 +24,7 @@
             
             <div class="header-center">
                 <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Buscar tipos de animal...">
+                    <input type="text" class="search-input" placeholder="Buscar controles lecheros...">
                     <i class="fas fa-search search-icon"></i>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="TipoAnimal.aspx" class="nav-link active">
+                            <a href="TipoAnimal.aspx" class="nav-link">
                                 <i class="fas fa-paw nav-icon"></i>
                                 <span class="nav-text">Tipos de Animal</span>
                             </a>
@@ -136,7 +136,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="ControlLechero.aspx" class="nav-link">
+                            <a href="ControlLechero.aspx" class="nav-link active">
                                 <i class="fas fa-tint nav-icon"></i>
                                 <span class="nav-text">Control Lechero</span>
                             </a>
@@ -203,11 +203,11 @@
         <main class="main-content">
             <!-- Header de la página -->
             <div class="page-header">
-                <h1 class="page-title">Gestión de Tipos de Animal</h1>
-                <p class="page-subtitle">Administra los tipos de animales de tu explotación</p>
+                <h1 class="page-title">Gestión de Control Lechero</h1>
+                <p class="page-subtitle">Administra los controles de producción lechera de tu explotación</p>
                 <div class="page-actions">
-                    <asp:Button ID="btnNuevoTipoAnimal" runat="server" Text="Nuevo Tipo" 
-                        CssClass="btn btn-primary" OnClientClick="openNewTipoAnimalModal(); return false;" />
+                    <asp:Button ID="btnNuevoControl" runat="server" Text="Nuevo Control" 
+                        CssClass="btn btn-primary" OnClientClick="openNewControlModal(); return false;" />
                     <a href="#" class="btn btn-secondary">
                         <i class="fas fa-download"></i>
                         Exportar
@@ -218,35 +218,35 @@
             <!-- Tarjeta principal -->
             <div class="stat-card">
                 <div class="stat-card-header">
-                    <h3 class="stat-card-title">Lista de Tipos de Animal</h3>
+                    <h3 class="stat-card-title">Lista de Controles Lecheros</h3>
                 </div>
-                <p class="stat-card-subtitle">Gestiona todos los tipos de animales registrados en el sistema</p>
+                <p class="stat-card-subtitle">Gestiona todos los controles de producción lechera registrados</p>
                 
                 <!-- Botón oculto para eliminación -->
-                <asp:HiddenField ID="hfTipoAnimalIdEliminar" runat="server" />
+                <asp:HiddenField ID="hfControlIdEliminar" runat="server" />
                 <asp:Button ID="btnEliminarOculto" runat="server" Text="Eliminar" 
                     CssClass="btn btn-danger" style="display:none;" 
                     OnClick="btnEliminarOculto_Click" />
 
-                <!-- Tabla de tipos de animal -->
+                <!-- Tabla de controles lecheros -->
                 <div class="table-container" style="margin-top: 20px;">
-                    <asp:GridView ID="gvTipoAnimal" runat="server" CssClass="table" 
-                        AutoGenerateColumns="False" OnRowCommand="gvTipoAnimal_RowCommand"
-                        EmptyDataText="No hay tipos de animal registrados" EnableViewState="True"
+                    <asp:GridView ID="gvControles" runat="server" CssClass="table" 
+                        AutoGenerateColumns="False" OnRowCommand="gvControles_RowCommand"
+                        EmptyDataText="No hay controles lecheros registrados" EnableViewState="True"
                         style="width: 100%; border-collapse: collapse;">
                         <Columns>
-                            <asp:BoundField DataField="ID_TipoAnimal" HeaderText="ID" />
-                            <asp:BoundField DataField="Nombre_Tipo" HeaderText="Nombre del Tipo" />
+                            <asp:BoundField DataField="ID_Control" HeaderText="ID" />
+                            <asp:BoundField DataField="Fecha_Control" HeaderText="Fecha de Control" DataFormatString="{0:dd/MM/yyyy}" />
                             <asp:TemplateField HeaderText="Acciones">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server" Text="Editar" 
-                                        CommandName="EditarTipoAnimal" CommandArgument='<%# Eval("ID_TipoAnimal") %>'
+                                        CommandName="EditarControl" CommandArgument='<%# Eval("ID_Control") %>'
                                         CssClass="btn btn-warning" />
                                     <asp:LinkButton ID="btnEliminar" runat="server" Text="Eliminar" 
-                                        CommandName="EliminarTipoAnimal" CommandArgument='<%# Eval("ID_TipoAnimal") %>'
+                                        CommandName="EliminarControl" CommandArgument='<%# Eval("ID_Control") %>'
                                         CssClass="btn btn-danger"
-                                        OnClientClick="return confirmDeleteTipoAnimal(this);" 
-                                        data-command-argument='<%# Eval("ID_TipoAnimal") %>' />
+                                        OnClientClick="return confirmDeleteControl(this);" 
+                                        data-command-argument='<%# Eval("ID_Control") %>' />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -255,20 +255,20 @@
             </div>
         </main>
 
-        <!-- Modal para agregar/editar tipo de animal -->
-        <div id="tipoAnimalModal" class="modal" runat="server">
+        <!-- Modal para agregar/editar control lechero -->
+        <div id="controlModal" class="modal" runat="server">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="modalTitle" runat="server">Nuevo Tipo de Animal</h3>
+                    <h3 id="modalTitle" runat="server">Nuevo Control Lechero</h3>
                     <span class="close" onclick="closeModal()">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <asp:HiddenField ID="hfTipoAnimalId" runat="server" />
+                    <asp:HiddenField ID="hfControlId" runat="server" />
                     
                     <div class="form-group">
-                        <label class="form-label">Nombre del Tipo de Animal</label>
-                        <asp:TextBox ID="txtNombreTipo" runat="server" CssClass="form-control" 
-                            placeholder="Ingrese el nombre del tipo de animal"></asp:TextBox>
+                        <label class="form-label">Fecha de Control</label>
+                        <asp:TextBox ID="txtFechaControl" runat="server" CssClass="form-control" 
+                            TextMode="Date" placeholder="Seleccione la fecha del control"></asp:TextBox>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -285,6 +285,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="Scripts/admin-dashboard.js"></script>
-    <script src="Scripts/TipoAnimal-page.js"></script>
+    <script src="Scripts/controlLechero-page.js"></script>
 </body>
 </html>
+

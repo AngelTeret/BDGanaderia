@@ -94,6 +94,66 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="Alimento.aspx" class="nav-link">
+                                <i class="fas fa-seedling nav-icon"></i>
+                                <span class="nav-text">Alimentos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="TipoAlimento.aspx" class="nav-link">
+                                <i class="fas fa-leaf nav-icon"></i>
+                                <span class="nav-text">Tipos de Alimento</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Racion.aspx" class="nav-link">
+                                <i class="fas fa-utensils nav-icon"></i>
+                                <span class="nav-text">Raciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Vacuna.aspx" class="nav-link">
+                                <i class="fas fa-syringe nav-icon"></i>
+                                <span class="nav-text">Vacunas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Tratamiento.aspx" class="nav-link">
+                                <i class="fas fa-pills nav-icon"></i>
+                                <span class="nav-text">Tratamientos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Medicamento.aspx" class="nav-link">
+                                <i class="fas fa-capsules nav-icon"></i>
+                                <span class="nav-text">Medicamentos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Veterinario.aspx" class="nav-link">
+                                <i class="fas fa-user-md nav-icon"></i>
+                                <span class="nav-text">Veterinarios</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="ControlLechero.aspx" class="nav-link">
+                                <i class="fas fa-tint nav-icon"></i>
+                                <span class="nav-text">Control Lechero</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="PeriodoProduccion.aspx" class="nav-link">
+                                <i class="fas fa-calendar-alt nav-icon"></i>
+                                <span class="nav-text">Períodos de Producción</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Ordeno.aspx" class="nav-link">
+                                <i class="fas fa-hand-holding-water nav-icon"></i>
+                                <span class="nav-text">Ordeños</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="EstadoAnimal.aspx" class="nav-link">
                                 <i class="fas fa-heartbeat nav-icon"></i>
                                 <span class="nav-text">Estados de Animal</span>

@@ -94,6 +94,66 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="Alimento.aspx" class="nav-link">
+                                <i class="fas fa-seedling nav-icon"></i>
+                                <span class="nav-text">Alimentos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="TipoAlimento.aspx" class="nav-link">
+                                <i class="fas fa-leaf nav-icon"></i>
+                                <span class="nav-text">Tipos de Alimento</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Racion.aspx" class="nav-link">
+                                <i class="fas fa-utensils nav-icon"></i>
+                                <span class="nav-text">Raciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Vacuna.aspx" class="nav-link">
+                                <i class="fas fa-syringe nav-icon"></i>
+                                <span class="nav-text">Vacunas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Tratamiento.aspx" class="nav-link">
+                                <i class="fas fa-pills nav-icon"></i>
+                                <span class="nav-text">Tratamientos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Medicamento.aspx" class="nav-link">
+                                <i class="fas fa-capsules nav-icon"></i>
+                                <span class="nav-text">Medicamentos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Veterinario.aspx" class="nav-link">
+                                <i class="fas fa-user-md nav-icon"></i>
+                                <span class="nav-text">Veterinarios</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="ControlLechero.aspx" class="nav-link">
+                                <i class="fas fa-tint nav-icon"></i>
+                                <span class="nav-text">Control Lechero</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="PeriodoProduccion.aspx" class="nav-link">
+                                <i class="fas fa-calendar-alt nav-icon"></i>
+                                <span class="nav-text">Períodos de Producción</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Ordeno.aspx" class="nav-link">
+                                <i class="fas fa-hand-holding-water nav-icon"></i>
+                                <span class="nav-text">Ordeños</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="EstadoAnimal.aspx" class="nav-link">
                                 <i class="fas fa-heartbeat nav-icon"></i>
                                 <span class="nav-text">Estados de Animal</span>
@@ -243,3 +303,248 @@
     <script src="Scripts/admin-dashboard.js"></script>
 </body>
 </html>
+
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a href="#" class="nav-link">
+
+                                <i class="fas fa-calendar nav-icon"></i>
+
+                                <span class="nav-text">Calendario</span>
+
+                                <span class="nav-badge">1</span>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </nav>
+
+        </aside>
+
+
+
+        <!-- OVERLAY PARA MÓVIL -->
+
+        <div class="sidebar-overlay"></div>
+
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <main class="main-content">
+
+            <!-- Header de la página -->
+
+            <div class="page-header">
+
+                <h1 class="page-title">Dashboard</h1>
+
+                <p class="page-subtitle">Sistema de Gestión Ganadera - BDGanaderia</p>
+
+                <div class="page-actions">
+
+                    <a href="#" class="btn btn-primary">
+
+                        <i class="fas fa-plus"></i>
+
+                        Agregar Ganado
+
+                    </a>
+
+                    <a href="#" class="btn btn-secondary">
+
+                        <i class="fas fa-cog"></i>
+
+                        Configurar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Tarjetas de estadísticas -->
+
+            <div class="stats-grid">
+
+                <!-- Tarjeta de estadísticas generales -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <h3 class="stat-card-title">Estadísticas Generales</h3>
+
+                    </div>
+
+                    <p class="stat-card-subtitle">Información diaria sobre estadísticas del sistema</p>
+
+                    
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Nuevos Usuarios</span>
+
+                        <span class="stat-value success">5</span>
+
+                    </div>
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Ventas</span>
+
+                        <span class="stat-value success">36</span>
+
+                    </div>
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Suscriptores</span>
+
+                        <span class="stat-value warning">12</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Tarjeta de ingresos -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <h3 class="stat-card-title">Ingresos y Gastos</h3>
+
+                    </div>
+
+                    <p class="stat-card-subtitle">Estadísticas de ingresos y gastos totales</p>
+
+                    
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">INGRESOS TOTALES</span>
+
+                        <span class="stat-value success">$9,782</span>
+
+                    </div>
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">GASTOS TOTALES</span>
+
+                        <span class="stat-value danger">$1,248</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Tarjeta de usuarios -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <h3 class="stat-card-title">Estadísticas de Usuarios</h3>
+
+                    </div>
+
+                    <p class="stat-card-subtitle">Información sobre usuarios del sistema</p>
+
+                    
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Usuarios Activos</span>
+
+                        <span class="stat-value">156</span>
+
+                    </div>
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Nuevos Hoy</span>
+
+                        <span class="stat-value success">8</span>
+
+                    </div>
+
+                    <div class="stat-item">
+
+                        <span class="stat-label">Sesiones</span>
+
+                        <span class="stat-value warning">342</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Tarjeta de ventas diarias -->
+
+                <div class="stat-card" style="background: var(--primary-color); color: white;">
+
+                    <div class="stat-card-header">
+
+                        <h3 class="stat-card-title" style="color: white;">Ventas Diarias</h3>
+
+                    </div>
+
+                    <p class="stat-card-subtitle" style="color: rgba(255,255,255,0.8);">25 Marzo - 02 Abril</p>
+
+                    
+
+                    <div style="font-size: 32px; font-weight: bold; margin: 20px 0;">
+
+                        $4,578.58
+
+                    </div>
+
+                    
+
+                    <div class="stat-item" style="border-color: rgba(255,255,255,0.2);">
+
+                        <span class="stat-label" style="color: rgba(255,255,255,0.8);">Crecimiento</span>
+
+                        <span class="stat-value success">+12.5%</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </form>
+
+
+
+    <!-- Scripts -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="Scripts/admin-dashboard.js"></script>
+
+</body>
+
+</html>
+
+
