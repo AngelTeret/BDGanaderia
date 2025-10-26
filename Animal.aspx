@@ -1,11 +1,11 @@
-<%@ Page Language="VB" AutoEventWireup="true" CodeFile="Raza.aspx.vb" Inherits="Raza" ResponseEncoding="utf-8" %>
+<%@ Page Language="VB" AutoEventWireup="true" CodeFile="Animal.aspx.vb" Inherits="Animal" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Razas - Sistema Ganadero</title>
+    <title>Gestión de Animales - Sistema Ganadero</title>
     <link href="Content/Site.css" rel="stylesheet" />
     <link href="Content/admin-dashboard.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -24,7 +24,7 @@
             
             <div class="header-center">
                 <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Buscar razas...">
+                    <input type="text" class="search-input" placeholder="Buscar animales...">
                     <i class="fas fa-search search-icon"></i>
                 </div>
             </div>
@@ -79,28 +79,10 @@
                 </div>
                 
                 <div class="nav-section">
-                    <div class="nav-section-title">Principal</div>
-                    <ul class="nav-menu">
-                        <li class="nav-item">
-                            <a href="Default.aspx" class="nav-link">
-                                <i class="fas fa-home nav-icon"></i>
-                                <span class="nav-text">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="Animal.aspx" class="nav-link">
-                                <i class="fas fa-paw nav-icon"></i>
-                                <span class="nav-text">Animales</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="nav-section">
                     <div class="nav-section-title">Gestión</div>
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="Raza.aspx" class="nav-link active">
+                            <a href="Raza.aspx" class="nav-link">
                                 <i class="fas fa-horse nav-icon"></i>
                                 <span class="nav-text">Razas</span>
                             </a>
@@ -124,7 +106,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="Animal.aspx" class="nav-link">
+                            <a href="Animal.aspx" class="nav-link active">
                                 <i class="fas fa-paw nav-icon"></i>
                                 <span class="nav-text">Animales</span>
                             </a>
@@ -173,11 +155,11 @@
         <main class="main-content">
             <!-- Header de la página -->
             <div class="page-header">
-                <h1 class="page-title">Gestión de Razas</h1>
-                <p class="page-subtitle">Administra las razas de ganado de tu explotación</p>
+                <h1 class="page-title">Gestión de Animales</h1>
+                <p class="page-subtitle">Administra el inventario de animales del ganado</p>
                 <div class="page-actions">
-                    <asp:Button ID="btnNuevaRaza" runat="server" Text="Nueva Raza" 
-                        CssClass="btn btn-primary" OnClientClick="openNewRazaModal(); return false;" />
+                    <asp:Button ID="btnNuevoAnimal" runat="server" Text="Nuevo Animal" 
+                        CssClass="btn btn-primary" OnClientClick="openNewAnimalModal(); return false;" />
                     <a href="#" class="btn btn-secondary">
                         <i class="fas fa-download"></i>
                         Exportar
@@ -188,35 +170,41 @@
             <!-- Tarjeta principal -->
             <div class="stat-card">
                 <div class="stat-card-header">
-                    <h3 class="stat-card-title">Lista de Razas</h3>
+                    <h3 class="stat-card-title">Lista de Animales</h3>
                 </div>
-                <p class="stat-card-subtitle">Gestiona todas las razas de ganado registradas en el sistema</p>
+                <p class="stat-card-subtitle">Gestiona todos los animales registrados en el sistema</p>
                 
                 <!-- Botón oculto para eliminación -->
-                <asp:HiddenField ID="hfRazaIdEliminar" runat="server" />
+                <asp:HiddenField ID="hfAnimalIdEliminar" runat="server" />
                 <asp:Button ID="btnEliminarOculto" runat="server" Text="Eliminar" 
                     CssClass="btn btn-danger" style="display:none;" 
                     OnClick="btnEliminarOculto_Click" />
 
-                <!-- Tabla de razas -->
+                <!-- Tabla de animales -->
                 <div class="table-container" style="margin-top: 20px;">
-                    <asp:GridView ID="gvRazas" runat="server" CssClass="table" 
-                        AutoGenerateColumns="False" OnRowCommand="gvRazas_RowCommand"
-                        EmptyDataText="No hay razas registradas" EnableViewState="True"
+                    <asp:GridView ID="gvAnimales" runat="server" CssClass="table" 
+                        AutoGenerateColumns="False" OnRowCommand="gvAnimales_RowCommand"
+                        EmptyDataText="No hay animales registrados" EnableViewState="True"
                         style="width: 100%; border-collapse: collapse;">
                         <Columns>
-                            <asp:BoundField DataField="ID_Raza" HeaderText="ID" />
-                            <asp:BoundField DataField="Nombre_Raza" HeaderText="Nombre de la Raza" />
+                            <asp:BoundField DataField="ID_Animal" HeaderText="ID" />
+                            <asp:BoundField DataField="Nombre_Animal" HeaderText="Nombre" />
+                            <asp:BoundField DataField="Fecha_Nacimiento" HeaderText="Fecha Nacimiento" DataFormatString="{0:dd/MM/yyyy}" />
+                            <asp:BoundField DataField="Sexo" HeaderText="Sexo" />
+                            <asp:BoundField DataField="Peso" HeaderText="Peso (kg)" DataFormatString="{0:F2}" />
+                            <asp:BoundField DataField="Raza_Nombre" HeaderText="Raza" />
+                            <asp:BoundField DataField="Tipo_Nombre" HeaderText="Tipo" />
+                            <asp:BoundField DataField="Estado_Nombre" HeaderText="Estado" />
                             <asp:TemplateField HeaderText="Acciones">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server" Text="Editar" 
-                                        CommandName="EditarRaza" CommandArgument='<%# Eval("ID_Raza") %>'
+                                        CommandName="EditarAnimal" CommandArgument='<%# Eval("ID_Animal") %>'
                                         CssClass="btn btn-warning" />
                                     <asp:LinkButton ID="btnEliminar" runat="server" Text="Eliminar" 
-                                        CommandName="EliminarRaza" CommandArgument='<%# Eval("ID_Raza") %>'
+                                        CommandName="EliminarAnimal" CommandArgument='<%# Eval("ID_Animal") %>'
                                         CssClass="btn btn-danger"
-                                        OnClientClick="return confirmDeleteRaza(this);" 
-                                        data-command-argument='<%# Eval("ID_Raza") %>' />
+                                        OnClientClick="return confirmDeleteAnimal(this);" 
+                                        data-command-argument='<%# Eval("ID_Animal") %>' />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -225,20 +213,58 @@
             </div>
         </main>
 
-        <!-- Modal para agregar/editar raza -->
-        <div id="razaModal" class="modal" runat="server">
+        <!-- Modal para agregar/editar animal -->
+        <div id="animalModal" class="modal" runat="server">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="modalTitle" runat="server">Nueva Raza</h3>
+                    <h3 id="modalTitle" runat="server" ClientIDMode="Static">Nuevo Animal</h3>
                     <span class="close" onclick="closeModal()">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <asp:HiddenField ID="hfRazaId" runat="server" />
+                    <asp:HiddenField ID="hfAnimalId" runat="server" />
                     
                     <div class="form-group">
-                        <label class="form-label">Nombre de la Raza</label>
-                        <asp:TextBox ID="txtNombreRaza" runat="server" CssClass="form-control" 
-                            placeholder="Ingrese el nombre de la raza"></asp:TextBox>
+                        <label class="form-label">Nombre del Animal</label>
+                        <asp:TextBox ID="txtNombreAnimal" runat="server" CssClass="form-control" 
+                            placeholder="Ingrese el nombre del animal"></asp:TextBox>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Nacimiento</label>
+                        <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" 
+                            TextMode="Date" placeholder="Seleccione la fecha"></asp:TextBox>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Sexo</label>
+                        <asp:DropDownList ID="ddlSexo" runat="server" CssClass="form-control">
+                            <asp:ListItem Value="M" Text="Macho"></asp:ListItem>
+                            <asp:ListItem Value="H" Text="Hembra"></asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Peso (kg)</label>
+                        <asp:TextBox ID="txtPeso" runat="server" CssClass="form-control" 
+                            placeholder="Ingrese el peso (ej: 120.5)" type="text" pattern="[0-9]+\.?[0-9]*"></asp:TextBox>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Raza</label>
+                        <asp:DropDownList ID="ddlRaza" runat="server" CssClass="form-control">
+                        </asp:DropDownList>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Animal</label>
+                        <asp:DropDownList ID="ddlTipoAnimal" runat="server" CssClass="form-control">
+                        </asp:DropDownList>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Estado del Animal</label>
+                        <asp:DropDownList ID="ddlEstadoAnimal" runat="server" CssClass="form-control">
+                        </asp:DropDownList>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -255,7 +281,20 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="Scripts/admin-dashboard.js"></script>
-    <script src="Scripts/raza-page.js"></script>
+    <script src="Scripts/Animal-page.js"></script>
+    
+    <!-- Script para asegurar que el modal esté cerrado al cargar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Si hay parámetro de éxito, asegurar que el modal esté cerrado
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                var modal = document.getElementById('animalModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
-

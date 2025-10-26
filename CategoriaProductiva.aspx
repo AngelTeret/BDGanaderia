@@ -1,11 +1,11 @@
-<%@ Page Language="VB" AutoEventWireup="true" CodeFile="Raza.aspx.vb" Inherits="Raza" ResponseEncoding="utf-8" %>
+<%@ Page Language="VB" AutoEventWireup="true" CodeFile="CategoriaProductiva.aspx.vb" Inherits="CategoriaProductiva" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Razas - Sistema Ganadero</title>
+    <title>Gestión de Categorías Productivas - Sistema Ganadero</title>
     <link href="Content/Site.css" rel="stylesheet" />
     <link href="Content/admin-dashboard.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -24,7 +24,7 @@
             
             <div class="header-center">
                 <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Buscar razas...">
+                    <input type="text" class="search-input" placeholder="Buscar categorías productivas...">
                     <i class="fas fa-search search-icon"></i>
                 </div>
             </div>
@@ -75,18 +75,6 @@
                                 <span class="nav-text">Dashboard</span>
                             </a>
                         </li>
-                    </ul>
-                </div>
-                
-                <div class="nav-section">
-                    <div class="nav-section-title">Principal</div>
-                    <ul class="nav-menu">
-                        <li class="nav-item">
-                            <a href="Default.aspx" class="nav-link">
-                                <i class="fas fa-home nav-icon"></i>
-                                <span class="nav-text">Dashboard</span>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="Animal.aspx" class="nav-link">
                                 <i class="fas fa-paw nav-icon"></i>
@@ -95,12 +83,12 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="nav-section">
                     <div class="nav-section-title">Gestión</div>
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="Raza.aspx" class="nav-link active">
+                            <a href="Raza.aspx" class="nav-link">
                                 <i class="fas fa-horse nav-icon"></i>
                                 <span class="nav-text">Razas</span>
                             </a>
@@ -118,7 +106,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="CategoriaProductiva.aspx" class="nav-link">
+                            <a href="CategoriaProductiva.aspx" class="nav-link active">
                                 <i class="fas fa-tags nav-icon"></i>
                                 <span class="nav-text">Categorías Productivas</span>
                             </a>
@@ -173,11 +161,11 @@
         <main class="main-content">
             <!-- Header de la página -->
             <div class="page-header">
-                <h1 class="page-title">Gestión de Razas</h1>
-                <p class="page-subtitle">Administra las razas de ganado de tu explotación</p>
+                <h1 class="page-title">Gestión de Categorías Productivas</h1>
+                <p class="page-subtitle">Administra las categorías productivas del ganado</p>
                 <div class="page-actions">
-                    <asp:Button ID="btnNuevaRaza" runat="server" Text="Nueva Raza" 
-                        CssClass="btn btn-primary" OnClientClick="openNewRazaModal(); return false;" />
+                    <asp:Button ID="btnNuevaCategoria" runat="server" Text="Nueva Categoría" 
+                        CssClass="btn btn-primary" OnClientClick="openNewCategoriaModal(); return false;" />
                     <a href="#" class="btn btn-secondary">
                         <i class="fas fa-download"></i>
                         Exportar
@@ -188,35 +176,35 @@
             <!-- Tarjeta principal -->
             <div class="stat-card">
                 <div class="stat-card-header">
-                    <h3 class="stat-card-title">Lista de Razas</h3>
+                    <h3 class="stat-card-title">Lista de Categorías Productivas</h3>
                 </div>
-                <p class="stat-card-subtitle">Gestiona todas las razas de ganado registradas en el sistema</p>
+                <p class="stat-card-subtitle">Gestiona todas las categorías productivas registradas en el sistema</p>
                 
                 <!-- Botón oculto para eliminación -->
-                <asp:HiddenField ID="hfRazaIdEliminar" runat="server" />
+                <asp:HiddenField ID="hfCategoriaIdEliminar" runat="server" />
                 <asp:Button ID="btnEliminarOculto" runat="server" Text="Eliminar" 
                     CssClass="btn btn-danger" style="display:none;" 
                     OnClick="btnEliminarOculto_Click" />
 
-                <!-- Tabla de razas -->
+                <!-- Tabla de categorías productivas -->
                 <div class="table-container" style="margin-top: 20px;">
-                    <asp:GridView ID="gvRazas" runat="server" CssClass="table" 
-                        AutoGenerateColumns="False" OnRowCommand="gvRazas_RowCommand"
-                        EmptyDataText="No hay razas registradas" EnableViewState="True"
+                    <asp:GridView ID="gvCategorias" runat="server" CssClass="table" 
+                        AutoGenerateColumns="False" OnRowCommand="gvCategorias_RowCommand"
+                        EmptyDataText="No hay categorías productivas registradas" EnableViewState="True"
                         style="width: 100%; border-collapse: collapse;">
                         <Columns>
-                            <asp:BoundField DataField="ID_Raza" HeaderText="ID" />
-                            <asp:BoundField DataField="Nombre_Raza" HeaderText="Nombre de la Raza" />
+                            <asp:BoundField DataField="ID_Categoria" HeaderText="ID" />
+                            <asp:BoundField DataField="Nombre_Categoria" HeaderText="Nombre de la Categoría" />
                             <asp:TemplateField HeaderText="Acciones">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server" Text="Editar" 
-                                        CommandName="EditarRaza" CommandArgument='<%# Eval("ID_Raza") %>'
+                                        CommandName="EditarCategoria" CommandArgument='<%# Eval("ID_Categoria") %>'
                                         CssClass="btn btn-warning" />
                                     <asp:LinkButton ID="btnEliminar" runat="server" Text="Eliminar" 
-                                        CommandName="EliminarRaza" CommandArgument='<%# Eval("ID_Raza") %>'
+                                        CommandName="EliminarCategoria" CommandArgument='<%# Eval("ID_Categoria") %>'
                                         CssClass="btn btn-danger"
-                                        OnClientClick="return confirmDeleteRaza(this);" 
-                                        data-command-argument='<%# Eval("ID_Raza") %>' />
+                                        OnClientClick="return confirmDeleteCategoria(this);" 
+                                        data-command-argument='<%# Eval("ID_Categoria") %>' />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -225,20 +213,20 @@
             </div>
         </main>
 
-        <!-- Modal para agregar/editar raza -->
-        <div id="razaModal" class="modal" runat="server">
+        <!-- Modal para agregar/editar categoría productiva -->
+        <div id="categoriaModal" class="modal" runat="server">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="modalTitle" runat="server">Nueva Raza</h3>
+                    <h3 id="modalTitle" runat="server">Nueva Categoría Productiva</h3>
                     <span class="close" onclick="closeModal()">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <asp:HiddenField ID="hfRazaId" runat="server" />
+                    <asp:HiddenField ID="hfCategoriaId" runat="server" />
                     
                     <div class="form-group">
-                        <label class="form-label">Nombre de la Raza</label>
-                        <asp:TextBox ID="txtNombreRaza" runat="server" CssClass="form-control" 
-                            placeholder="Ingrese el nombre de la raza"></asp:TextBox>
+                        <label class="form-label">Nombre de la Categoría</label>
+                        <asp:TextBox ID="txtNombreCategoria" runat="server" CssClass="form-control" 
+                            placeholder="Ingrese el nombre de la categoría productiva"></asp:TextBox>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -255,7 +243,6 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="Scripts/admin-dashboard.js"></script>
-    <script src="Scripts/raza-page.js"></script>
+    <script src="Scripts/CategoriaProductiva-page.js"></script>
 </body>
 </html>
-
