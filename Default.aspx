@@ -94,6 +94,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="EstadoAnimal.aspx" class="nav-link">
+                                <i class="fas fa-heartbeat nav-icon"></i>
+                                <span class="nav-text">Estados de Animal</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-chart-bar nav-icon"></i>
                                 <span class="nav-text">Reportes</span>

@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Web.config - Contiene credenciales específicas de cada desarrollador
+Web.config
+
+# Archivos de configuración de usuario de Visual Studio
+*.vbproj.user
+*.csproj.user
+*.vbproj.userosscache
+*.csproj.userosscache
