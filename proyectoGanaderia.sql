@@ -1253,6 +1253,39 @@ END;
 GO
 
 
+CREATE PROCEDURE ActualizarAnimalTratamiento
+    @ID_Animal INT,
+    @ID_Tratamiento INT,
+    @Fecha_Tratamiento DATE,
+    @ID_Veterinario INT,
+    @Observacion VARCHAR(200),
+    @Nueva_Fecha_Tratamiento DATE
+AS
+BEGIN
+    
+    IF @Fecha_Tratamiento <> @Nueva_Fecha_Tratamiento
+    BEGIN
+        
+        INSERT INTO Animal_Tratamiento (ID_Animal, ID_Tratamiento, ID_Veterinario, Fecha_Tratamiento, Observacion)
+        VALUES (@ID_Animal, @ID_Tratamiento, @ID_Veterinario, @Nueva_Fecha_Tratamiento, @Observacion);
+        
+        
+        DELETE FROM Animal_Tratamiento 
+        WHERE ID_Animal = @ID_Animal AND ID_Tratamiento = @ID_Tratamiento AND Fecha_Tratamiento = @Fecha_Tratamiento;
+    END
+    ELSE
+    BEGIN
+        
+        UPDATE Animal_Tratamiento
+        SET ID_Veterinario = @ID_Veterinario,
+            Observacion = @Observacion
+        WHERE ID_Animal = @ID_Animal AND ID_Tratamiento = @ID_Tratamiento AND Fecha_Tratamiento = @Fecha_Tratamiento;
+    END
+    
+    SELECT @ID_Animal AS ID_Animal, @ID_Tratamiento AS ID_Tratamiento;
+END;
+GO
+
 CREATE PROCEDURE EliminarAnimalTratamiento
     @ID_Animal INT,
     @ID_Tratamiento INT,
@@ -1478,6 +1511,21 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE ActualizarAnimalPotrero
+    @ID_Animal INT,
+    @ID_Potrero INT,
+    @Fecha_Entrada DATE,
+    @Fecha_Salida DATE
+AS
+BEGIN
+    UPDATE Animal_Potrero
+    SET Fecha_Salida = @Fecha_Salida
+    WHERE ID_Animal = @ID_Animal AND ID_Potrero = @ID_Potrero AND Fecha_Entrada = @Fecha_Entrada;
+    
+    SELECT @ID_Animal AS ID_Animal, @ID_Potrero AS ID_Potrero;
+END;
+GO
 
 CREATE PROCEDURE EliminarAnimalPotrero
     @ID_Animal INT,
@@ -2078,7 +2126,6 @@ END;
 GO
 
 
--- Actualiza solo campos no clave (ej. Fecha_Salida)
 CREATE PROCEDURE ActualizarAnimalCorral
     @ID_Animal INT,
     @ID_Corral INT,

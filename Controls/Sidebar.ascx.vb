@@ -6,9 +6,7 @@ Public Partial Class Controls_Sidebar
     Inherits System.Web.UI.UserControl
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        If Not IsPostBack Then
-            RenderMenu()
-        End If
+        RenderMenu()
     End Sub
 
     Private Sub RenderMenu()

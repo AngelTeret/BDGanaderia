@@ -1,0 +1,309 @@
+/**
+ * Usuario Page JavaScript
+ * Funcionalidades para la página Usuario.aspx
+ */
+
+// Función para mostrar/ocultar contraseña
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById('icon-' + inputId);
+    
+    if (input && icon) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+}
+
+// Función para validar longitud de contraseña
+function validatePasswordLength() {
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    const contraseñaLength = document.getElementById('contraseñaLength');
+    const contraseñaConfirmLength = document.getElementById('contraseñaConfirmLength');
+    
+    let isValid = true;
+    
+    // Validar contraseña principal
+    if (txtContrasena && contraseñaLength) {
+        if (txtContrasena.value !== '' && txtContrasena.value.length < 6) {
+            contraseñaLength.style.display = 'block';
+            txtContrasena.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            contraseñaLength.style.display = 'none';
+            txtContrasena.classList.remove('is-invalid');
+        }
+    }
+    
+    // Validar confirmación
+    if (txtConfirmarContrasena && contraseñaConfirmLength) {
+        if (txtConfirmarContrasena.value !== '' && txtConfirmarContrasena.value.length < 6) {
+            contraseñaConfirmLength.style.display = 'block';
+            txtConfirmarContrasena.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            contraseñaConfirmLength.style.display = 'none';
+            txtConfirmarContrasena.classList.remove('is-invalid');
+        }
+    }
+    
+    return isValid;
+}
+
+// Función para validar contraseñas
+function validatePasswords() {
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    const contraseñaMatch = document.getElementById('contraseñaMatch');
+    const btnGuardar = document.getElementById('btnGuardar');
+    
+    let isValid = true;
+    
+    if (txtContrasena && txtConfirmarContrasena && contraseñaMatch) {
+        if (txtConfirmarContrasena.value !== '' && txtContrasena.value !== '') {
+            if (txtContrasena.value !== txtConfirmarContrasena.value) {
+                contraseñaMatch.style.display = 'block';
+                txtConfirmarContrasena.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                contraseñaMatch.style.display = 'none';
+                txtConfirmarContrasena.classList.remove('is-invalid');
+            }
+        }
+    }
+    
+    // Habilitar/deshabilitar botón de guardar
+    updateGuardarButton();
+    
+    return isValid;
+}
+
+// Función para actualizar estado del botón Guardar
+function updateGuardarButton() {
+    const btnGuardar = document.getElementById('btnGuardar');
+    const hfUsuarioId = document.getElementById('hfUsuarioId');
+    const txtNombreUsuario = document.getElementById('txtNombreUsuario');
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    const txtCorreo = document.getElementById('txtCorreo');
+    const ddlRol = document.getElementById('ddlRol');
+    
+    if (!btnGuardar) return;
+    
+    // Verificar si es nuevo usuario o edición
+    const isNewUsuario = !hfUsuarioId || hfUsuarioId.value === '0';
+    
+    // Validar nombre de usuario
+    const nombreValido = txtNombreUsuario && txtNombreUsuario.value.trim() !== '';
+    
+    // Validar contraseña
+    let contrasenaValida = true;
+    if (isNewUsuario) {
+        // En nuevo usuario, contraseña es obligatoria
+        contrasenaValida = txtContrasena && txtContrasena.value.length >= 6 && 
+                          txtConfirmarContrasena && txtContrasena.value === txtConfirmarContrasena.value;
+    } else {
+        // En edición, contraseña es opcional, pero si se ingresa debe ser válida
+        if (txtContrasena && txtContrasena.value !== '') {
+            contrasenaValida = txtContrasena.value.length >= 6 && 
+                              txtConfirmarContrasena && txtContrasena.value === txtConfirmarContrasena.value;
+        }
+    }
+    
+    // Validar rol
+    const rolValido = ddlRol && ddlRol.value !== '0';
+    
+    // Habilitar o deshabilitar botón
+    if (nombreValido && contrasenaValida && rolValido) {
+        btnGuardar.disabled = false;
+        btnGuardar.style.opacity = '1';
+    } else {
+        btnGuardar.disabled = true;
+        btnGuardar.style.opacity = '0.6';
+    }
+}
+
+// Función para mostrar modal de edición (llamada desde el servidor)
+function showEditModal() {
+    const modal = document.getElementById('usuarioModal');
+    if (modal) {
+        modal.style.display = 'block';
+        // Cuando es edición, ocultar el mensaje de confirmar contraseña
+        const hfUsuarioId = document.getElementById('hfUsuarioId');
+        if (hfUsuarioId && hfUsuarioId.value !== '0') {
+            const contraseñaMatch = document.getElementById('contraseñaMatch');
+            if (contraseñaMatch) {
+                contraseñaMatch.style.display = 'none';
+            }
+        }
+        // Actualizar estado del botón después de un pequeño delay
+        setTimeout(updateGuardarButton, 100);
+    }
+}
+
+// Función para mostrar modal
+function showModal() {
+    const modal = document.getElementById('usuarioModal');
+    if (modal) {
+        modal.style.display = 'block';
+        // Actualizar estado del botón después de un pequeño delay
+        setTimeout(updateGuardarButton, 100);
+    }
+}
+
+// Función para cerrar modal
+function closeModal() {
+    const modal = document.getElementById('usuarioModal');
+    if (modal) {
+        modal.style.display = 'none';
+        clearForm();
+    }
+}
+
+// Función para limpiar formulario
+function clearForm() {
+    const txtNombreUsuario = document.getElementById('txtNombreUsuario');
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    const txtCorreo = document.getElementById('txtCorreo');
+    const ddlRol = document.getElementById('ddlRol');
+    const hfUsuarioId = document.getElementById('hfUsuarioId');
+    const modalTitle = document.getElementById('modalTitle');
+    const contraseñaMatch = document.getElementById('contraseñaMatch');
+    
+    if (txtNombreUsuario) txtNombreUsuario.value = '';
+    if (txtContrasena) txtContrasena.value = '';
+    if (txtConfirmarContrasena) txtConfirmarContrasena.value = '';
+    if (txtCorreo) txtCorreo.value = '';
+    if (ddlRol && ddlRol.options.length > 0) ddlRol.selectedIndex = 0;
+    if (hfUsuarioId) hfUsuarioId.value = '0';
+    if (modalTitle) modalTitle.innerText = 'Nuevo Usuario';
+    if (contraseñaMatch) contraseñaMatch.style.display = 'none';
+    
+    // Resetear tipo de input a password si hay iconos
+    const icon1 = document.getElementById('icon-txtContrasena');
+    const icon2 = document.getElementById('icon-txtConfirmarContrasena');
+    if (icon1 && txtContrasena) {
+        txtContrasena.type = 'password';
+        icon1.classList.remove('fa-eye-slash');
+        icon1.classList.add('fa-eye');
+    }
+    if (icon2 && txtConfirmarContrasena) {
+        txtConfirmarContrasena.type = 'password';
+        icon2.classList.remove('fa-eye-slash');
+        icon2.classList.add('fa-eye');
+    }
+}
+
+// Función para confirmar eliminación
+function confirmDeleteUsuario(button, e) {
+    // Prevenir el postback inmediatamente
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Obtener el ID del usuario del CommandArgument
+    const usuarioId = button.getAttribute('data-command-argument');
+    
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción! El usuario será eliminado permanentemente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Guardar el ID en el campo oculto
+            const hfUsuarioIdEliminar = document.getElementById('hfUsuarioIdEliminar');
+            if (hfUsuarioIdEliminar) {
+                hfUsuarioIdEliminar.value = usuarioId;
+            }
+            
+            // Hacer clic en el botón oculto
+            const btnEliminarOculto = document.getElementById('btnEliminarOculto');
+            if (btnEliminarOculto) {
+                btnEliminarOculto.click();
+            }
+        }
+    });
+    return false; // Prevenir el postback inmediato
+}
+
+// Función para abrir modal de nuevo usuario
+function openNewUsuarioModal() {
+    clearForm();
+    showModal();
+}
+
+// Cerrar modal al hacer clic fuera de él
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('usuarioModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+// Eventos para validar en tiempo real
+document.addEventListener('DOMContentLoaded', function() {
+    const txtNombreUsuario = document.getElementById('txtNombreUsuario');
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    const txtCorreo = document.getElementById('txtCorreo');
+    const ddlRol = document.getElementById('ddlRol');
+    
+    // Validar cada campo
+    if (txtNombreUsuario) {
+        txtNombreUsuario.addEventListener('input', updateGuardarButton);
+    }
+    
+    if (txtContrasena) {
+        txtContrasena.addEventListener('input', function() {
+            validatePasswordLength();
+            if (txtConfirmarContrasena && txtConfirmarContrasena.value !== '') {
+                validatePasswords();
+            }
+        });
+    }
+    
+    if (txtConfirmarContrasena) {
+        txtConfirmarContrasena.addEventListener('input', function() {
+            validatePasswordLength();
+            validatePasswords();
+        });
+    }
+    
+    if (txtCorreo) {
+        txtCorreo.addEventListener('input', updateGuardarButton);
+    }
+    
+    if (ddlRol) {
+        ddlRol.addEventListener('change', updateGuardarButton);
+    }
+    
+    // Ejecutar validación inicial
+    setTimeout(updateGuardarButton, 100);
+});
+
+// Hacer funciones disponibles globalmente
+window.showEditModal = showEditModal;
+window.showModal = showModal;
+window.closeModal = closeModal;
+window.clearForm = clearForm;
+window.confirmDeleteUsuario = confirmDeleteUsuario;
+window.openNewUsuarioModal = openNewUsuarioModal;
+window.togglePassword = togglePassword;
+window.validatePasswords = validatePasswords;
+window.validatePasswordLength = validatePasswordLength;
+window.updateGuardarButton = updateGuardarButton;
+

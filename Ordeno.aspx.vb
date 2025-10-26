@@ -6,8 +6,24 @@ Partial Public Class Ordeno
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            CargarOrdenadores()
             CargarOrdenos()
         End If
+    End Sub
+
+    Private Sub CargarOrdenadores()
+        Try
+            Dim query As String = "SELECT ID_Ordenador, Nombre_Ordenador FROM Ordenador ORDER BY Nombre_Ordenador"
+            Dim ordenadoresData As DataTable = DataAccess.ExecuteSelectQuery(query)
+            
+            ddlOrdenador.DataSource = ordenadoresData
+            ddlOrdenador.DataTextField = "Nombre_Ordenador"
+            ddlOrdenador.DataValueField = "ID_Ordenador"
+            ddlOrdenador.DataBind()
+            ddlOrdenador.Items.Insert(0, New ListItem("Seleccione un ordenador", "0"))
+        Catch ex As Exception
+            MostrarAlerta("Error al cargar los ordenadores: " & ex.Message, "danger")
+        End Try
     End Sub
 
     Private Sub CargarOrdenos()
@@ -21,8 +37,13 @@ Partial Public Class Ordeno
                 Return
             End If
             
-            ' Usar procedimiento almacenado para listar
-            Dim ordenosData As DataTable = DataAccess.ExecuteStoredProcedure("ListarOrdeno")
+            ' Usar JOIN para obtener el nombre del ordenador
+            Dim query As String = "SELECT O.ID_Ordeno, O.ID_Ordenador, ORD.Nombre_Ordenador, O.Fecha_Ordeno, O.Turno " & _
+                                  "FROM Ordeno O " & _
+                                  "INNER JOIN Ordenador ORD ON O.ID_Ordenador = ORD.ID_Ordenador " & _
+                                  "ORDER BY O.Fecha_Ordeno DESC"
+            
+            Dim ordenosData As DataTable = DataAccess.ExecuteSelectQuery(query)
             gvOrdenos.DataSource = ordenosData
             gvOrdenos.DataBind()
         Catch ex As Exception
@@ -47,7 +68,7 @@ Partial Public Class Ordeno
                     ordenoId = Convert.ToInt32(hfOrdenoId.Value)
                 End If
                 
-                Dim idOrdenador As Integer = Convert.ToInt32(txtIdOrdenador.Text.Trim())
+                Dim idOrdenador As Integer = Convert.ToInt32(ddlOrdenador.SelectedValue)
                 Dim fechaOrdeno As String = txtFechaOrdeno.Text.Trim()
                 Dim turno As String = ddlTurno.SelectedValue
 
@@ -109,7 +130,13 @@ Partial Public Class Ordeno
                 Dim row As DataRow = ordenoData.Rows(0)
                 
                 hfOrdenoId.Value = ordenoId.ToString()
-                txtIdOrdenador.Text = row("ID_Ordenador").ToString()
+                
+                ' Cargar ordenadores si no están cargados
+                If ddlOrdenador.Items.Count <= 1 Then
+                    CargarOrdenadores()
+                End If
+                ddlOrdenador.SelectedValue = row("ID_Ordenador").ToString()
+                
                 txtFechaOrdeno.Text = Convert.ToDateTime(row("Fecha_Ordeno")).ToString("yyyy-MM-dd")
                 ddlTurno.SelectedValue = row("Turno").ToString()
                 
@@ -189,8 +216,8 @@ Partial Public Class Ordeno
     End Function
 
     Private Function ValidarFormulario() As Boolean
-        If String.IsNullOrEmpty(txtIdOrdenador.Text.Trim()) Then
-            MostrarAlerta("El ID del ordenador es requerido", "warning")
+        If ddlOrdenador.SelectedValue = "0" Then
+            MostrarAlerta("Debe seleccionar un ordenador", "warning")
             Return False
         End If
         
@@ -208,7 +235,9 @@ Partial Public Class Ordeno
     End Function
 
     Private Sub LimpiarFormulario()
-        txtIdOrdenador.Text = ""
+        If ddlOrdenador.Items.Count > 0 Then
+            ddlOrdenador.SelectedIndex = 0
+        End If
         txtFechaOrdeno.Text = ""
         ddlTurno.SelectedIndex = 0
         hfOrdenoId.Value = "0"
