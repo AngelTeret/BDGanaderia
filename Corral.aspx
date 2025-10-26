@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoCorral" runat="server" Text="Nuevo Corral" 
                 CssClass="btn btn-primary" OnClientClick="openNewCorralModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

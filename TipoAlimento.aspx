@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoTipoAlimento" runat="server" Text="Nuevo Tipo" 
                 CssClass="btn btn-primary" OnClientClick="openNewTipoAlimentoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

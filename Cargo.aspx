@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoCargo" runat="server" Text="Nuevo Cargo" 
                 CssClass="btn btn-primary" OnClientClick="openNewCargoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

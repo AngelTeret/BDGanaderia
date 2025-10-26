@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoVeterinario" runat="server" Text="Nuevo Veterinario" 
                 CssClass="btn btn-primary" OnClientClick="openNewVeterinarioModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

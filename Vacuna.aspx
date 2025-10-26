@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevaVacuna" runat="server" Text="Nueva Vacuna" 
                 CssClass="btn btn-primary" OnClientClick="openNewVacunaModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

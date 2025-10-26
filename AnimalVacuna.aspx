@@ -11,11 +11,7 @@
         <p class="page-subtitle">Registra las vacunas aplicadas a los animales con fecha</p>
         <div class="page-actions">
             <asp:Button ID="btnNuevaVacunacion" runat="server" Text="Nueva Vacunación" 
-                CssClass="btn btn-primary" OnClientClick="openNewVacunacionModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
+                CssClass="btn btn-primary" OnClientClick="openNewVacunacionModal(); return false;" />   
         </div>
     </div>
 

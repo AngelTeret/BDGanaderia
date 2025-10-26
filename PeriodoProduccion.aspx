@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoPeriodo" runat="server" Text="Nuevo Período" 
                 CssClass="btn btn-primary" OnClientClick="openNewPeriodoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

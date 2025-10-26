@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoTipoPasto" runat="server" Text="Nuevo Tipo de Pasto" 
                 CssClass="btn btn-primary" OnClientClick="openNewTipoPastoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 
