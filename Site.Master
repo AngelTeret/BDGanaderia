@@ -1,0 +1,83 @@
+<%@ Master Language="VB" AutoEventWireup="true" CodeFile="Site.Master.vb" Inherits="SiteMaster" %>
+<%@ Register Src="~/Controls/Sidebar.ascx" TagPrefix="uc1" TagName="Sidebar" %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Gestión Ganadera - BDGanaderia</title>
+    <link href="Content/Site.css" rel="stylesheet" />
+    <link href="Content/admin-dashboard.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <!-- HEADER SUPERIOR -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="hamburger-menu" type="button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="#" class="logo">BDGanaderia</a>
+            </div>
+            
+            <div class="header-center">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Buscar...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button class="header-icon" title="Mensajes">
+                    <i class="fas fa-envelope"></i>
+                </button>
+                
+                <button class="header-icon" title="Notificaciones">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Admin</div>
+                    </div>
+                </div>
+                
+                <button class="header-icon" title="Configuración">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- SIDEBAR LATERAL -->
+        <aside id="sidebar" class="sidebar">
+            <uc1:Sidebar runat="server" ID="Sidebar1" />
+        </aside>
+
+        <!-- OVERLAY PARA MÓVIL -->
+        <div class="sidebar-overlay"></div>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+        
+        <!-- Scripts comunes -->
+        <script src="Scripts/admin-dashboard.js"></script>
+        <script src="Scripts/sidebar-accordion.js"></script>
+        
+        <!-- Scripts de página específica -->
+        <asp:ContentPlaceHolder ID="ScriptsContent" runat="server">
+        </asp:ContentPlaceHolder>
+    </form>
+</body>
+</html>
+

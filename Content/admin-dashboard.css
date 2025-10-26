@@ -205,6 +205,8 @@ body {
     transition: transform var(--transition-speed) ease;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    overflow-x: hidden;
+    will-change: transform;
 }
 
 .sidebar.collapsed {
@@ -262,10 +264,34 @@ body {
     letter-spacing: 1px;
     margin-bottom: 15px;
     padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: color var(--transition-speed) ease;
+}
+
+.nav-section-title:hover {
+    color: var(--accent-color);
+}
+
+.nav-section-title.is-open {
+    color: var(--accent-color);
+}
+
+.nav-section-title[role="button"] {
+    position: relative;
+}
+
+.nav-arrow {
+    transition: transform var(--transition-speed) ease;
 }
 
 .nav-menu {
     list-style: none;
+    transition: max-height var(--transition-speed) ease;
+    overflow: hidden;
 }
 
 .nav-item {
@@ -332,9 +358,10 @@ body {
     margin-top: var(--header-height);
     margin-left: var(--sidebar-width);
     padding: 30px;
-    transition: margin-left var(--transition-speed) ease;
+    transition: margin-left var(--transition-speed) ease, width var(--transition-speed) ease;
     min-height: calc(100vh - var(--header-height));
     width: calc(100% - var(--sidebar-width));
+    will-change: margin-left, width;
 }
 
 .main-content.sidebar-collapsed {

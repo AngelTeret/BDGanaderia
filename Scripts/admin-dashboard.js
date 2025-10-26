@@ -131,7 +131,6 @@
             if (overlay) overlay.classList.remove('show');
             if (mainContent) {
                 mainContent.classList.remove('sidebar-collapsed');
-                mainContent.style.width = 'calc(100% - var(--sidebar-width))';
             }
         } else {
             // Móvil: sidebar oculto por defecto
@@ -140,7 +139,6 @@
             if (overlay) overlay.classList.remove('show');
             if (mainContent) {
                 mainContent.classList.add('sidebar-collapsed');
-                mainContent.style.width = '100%';
             }
         }
     }
@@ -174,13 +172,11 @@
             if (overlay) overlay.classList.add('show');
             if (mainContent) {
                 mainContent.classList.add('sidebar-collapsed');
-                mainContent.style.width = '100%';
             }
         } else {
             // Escritorio: ajustar contenido
             if (mainContent) {
                 mainContent.classList.remove('sidebar-collapsed');
-                mainContent.style.width = 'calc(100% - var(--sidebar-width))';
             }
         }
         
@@ -201,7 +197,6 @@
         if (overlay) overlay.classList.remove('show');
         if (mainContent) {
             mainContent.classList.add('sidebar-collapsed');
-            mainContent.style.width = '100%';
         }
         
         console.log('✅ Sidebar cerrado');

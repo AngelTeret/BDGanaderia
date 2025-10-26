@@ -296,7 +296,7 @@ ALTER TABLE Animal_Categoria
 ADD CONSTRAINT FK_AnimalCategoria_Categoria
 FOREIGN KEY (ID_Categoria) REFERENCES Categoria_Productiva(ID_Categoria);
 
--- Alimentación
+-- Alimentaciï¿½n
 ALTER TABLE Racion_Alimento
 ADD CONSTRAINT FK_RacionAlimento_Racion
 FOREIGN KEY (ID_Racion) REFERENCES Racion(ID_Racion);
@@ -379,7 +379,7 @@ ALTER TABLE Control_Ambiental
 ADD CONSTRAINT FK_ControlAmb_Potrero
 FOREIGN KEY (ID_Potrero) REFERENCES Potrero(ID_Potrero);
 
--- Producción lechera
+-- Producciï¿½n lechera
 ALTER TABLE Ordeno
 ADD CONSTRAINT FK_Ordeno_Ordenador
 FOREIGN KEY (ID_Ordenador) REFERENCES Ordenador(ID_Ordenador);
@@ -853,7 +853,7 @@ END;
 GO
 
 -- No hay campos no-clave para actualizar (la PK incluye la fecha)
--- Eliminación por clave compuesta
+-- Eliminaciï¿½n por clave compuesta
 CREATE PROCEDURE EliminarAnimalRacion
     @ID_Animal INT,
     @ID_Racion INT,
