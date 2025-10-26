@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "IIS Express",
+      "type": "iis",
+      "request": "launch",
+      "url": "https://localhost:44307/Default.aspx",
+      "ssl": true,
+      "port": 44307
+    }
+  ]
+}
