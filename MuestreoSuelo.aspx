@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoMuestreo" runat="server" Text="Nuevo Muestreo" 
                 CssClass="btn btn-primary" OnClientClick="openNewMuestreoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevaCategoria" runat="server" Text="Nueva Categoría" 
                 CssClass="btn btn-primary" OnClientClick="openNewCategoriaModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

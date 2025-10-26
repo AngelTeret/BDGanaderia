@@ -11,11 +11,7 @@
         <p class="page-subtitle">Registra el movimiento de animales entre potreros</p>
         <div class="page-actions">
             <asp:Button ID="btnNuevoMovimiento" runat="server" Text="Nuevo Movimiento" 
-                CssClass="btn btn-primary" OnClientClick="openNewMovimientoModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
+                CssClass="btn btn-primary" OnClientClick="openNewMovimientoModal(); return false;" />   
         </div>
     </div>
 

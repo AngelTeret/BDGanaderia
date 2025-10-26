@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoRol" runat="server" Text="Nuevo Rol" 
                 CssClass="btn btn-primary" OnClientClick="openNewRolModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

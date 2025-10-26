@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevaAsignacion" runat="server" Text="Nueva Asignación" 
                 CssClass="btn btn-primary" OnClientClick="openNewAsignacionModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 

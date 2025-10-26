@@ -12,10 +12,6 @@
         <div class="page-actions">
             <asp:Button ID="btnNuevoPotrero" runat="server" Text="Nuevo Potrero" 
                 CssClass="btn btn-primary" OnClientClick="openNewPotreroModal(); return false;" />
-            <a href="#" class="btn btn-secondary">
-                <i class="fas fa-download"></i>
-                Exportar
-            </a>
         </div>
     </div>
 
