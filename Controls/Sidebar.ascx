@@ -1,11 +1,9 @@
 <%@ Control Language="VB" AutoEventWireup="true" CodeFile="Sidebar.ascx.vb" Inherits="Controls_Sidebar" %>
 
 <div class="sidebar-header">
-    <div class="sidebar-user">
-        <div class="sidebar-avatar">A</div>
-        <div class="sidebar-user-info">
-            <h3>Administrador</h3>
-            <p>Administrador del Sistema</p>
+    <div class="sidebar-welcome">
+        <div class="sidebar-welcome-text">
+            <h3>¡Bienvenido!</h3>
         </div>
     </div>
 </div>

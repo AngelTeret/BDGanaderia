@@ -231,19 +231,72 @@
         initDashboard();
     }
 
+    /**
+     * Bloquea el scroll del body cuando se abre un modal
+     */
+    function lockBodyScroll() {
+        if (!document.body.style.overflow) {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            if (scrollbarWidth > 0) {
+                document.body.style.paddingRight = scrollbarWidth + 'px';
+            }
+        }
+    }
+
+    /**
+     * Libera el scroll del body cuando se cierra un modal
+     */
+    function unlockBodyScroll() {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+    }
+
+    /**
+     * Wrapper mejorado para mostrar modales (bloquea el scroll)
+     */
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+            lockBodyScroll();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Wrapper mejorado para cerrar modales (libera el scroll)
+     */
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+            unlockBodyScroll();
+            return true;
+        }
+        return false;
+    }
+
     // API pública
     window.Dashboard = {
         toggle: toggleSidebar,
         open: openSidebar,
         close: closeSidebar,
         getState: getSidebarState,
-        forceState: forceSidebarState
+        forceState: forceSidebarState,
+        lockBodyScroll: lockBodyScroll,
+        unlockBodyScroll: unlockBodyScroll
     };
 
     // Funciones globales para compatibilidad
     window.toggleSidebar = toggleSidebar;
     window.openSidebar = openSidebar;
     window.closeSidebar = closeSidebar;
+    window.lockBodyScroll = lockBodyScroll;
+    window.unlockBodyScroll = unlockBodyScroll;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
 
     console.log('🎉 Admin Dashboard cargado y listo');
 

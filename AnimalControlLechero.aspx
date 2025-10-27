@@ -7,8 +7,8 @@
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
     <!-- Header de la página -->
     <div class="page-header">
-        <h1 class="page-title">Gestión de Control Lechero</h1>
-        <p class="page-subtitle">Registra la producción de leche por animal</p>
+        <h1 class="page-title">Registro de Producción Lechera</h1>
+        <p class="page-subtitle">Registra la cantidad de leche producida por cada animal</p>
         <div class="page-actions">
             <asp:Button ID="btnNuevoRegistro" runat="server" Text="Nuevo Registro" 
                 CssClass="btn btn-primary" OnClientClick="openNewRegistroModal(); return false;" />
@@ -18,9 +18,9 @@
     <!-- Tarjeta principal -->
     <div class="stat-card">
         <div class="stat-card-header">
-            <h3 class="stat-card-title">Lista de Control Lechero</h3>
+            <h3 class="stat-card-title">Producción de Leche por Animal</h3>
         </div>
-        <p class="stat-card-subtitle">Gestiona todos los registros de producción de leche</p>
+        <p class="stat-card-subtitle">Historial de litros de leche producidos por cada animal en sus controles</p>
         
         <!-- Botón oculto para eliminación -->
         <asp:HiddenField ID="hfAnimalIdEliminar" runat="server" />
@@ -65,7 +65,7 @@
     <div id="registroModal" class="modal" runat="server">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitle" runat="server">Nuevo Registro de Control Lechero</h3>
+                <h3 id="modalTitle" runat="server">Nuevo Registro de Producción</h3>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body">

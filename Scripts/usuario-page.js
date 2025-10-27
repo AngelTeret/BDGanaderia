@@ -30,26 +30,32 @@ function validatePasswordLength() {
     
     let isValid = true;
     
-    // Validar contraseña principal
+    // Validar contraseña principal - solo mostrar error si hay contenido
     if (txtContrasena && contraseñaLength) {
-        if (txtContrasena.value !== '' && txtContrasena.value.length < 6) {
-            contraseñaLength.style.display = 'block';
+        if (txtContrasena.value.trim() === '') {
+            contraseñaLength.classList.remove('show');
+            txtContrasena.classList.remove('is-invalid');
+        } else if (txtContrasena.value.length < 6) {
+            contraseñaLength.classList.add('show');
             txtContrasena.classList.add('is-invalid');
             isValid = false;
         } else {
-            contraseñaLength.style.display = 'none';
+            contraseñaLength.classList.remove('show');
             txtContrasena.classList.remove('is-invalid');
         }
     }
     
-    // Validar confirmación
+    // Validar confirmación - solo mostrar error si hay contenido
     if (txtConfirmarContrasena && contraseñaConfirmLength) {
-        if (txtConfirmarContrasena.value !== '' && txtConfirmarContrasena.value.length < 6) {
-            contraseñaConfirmLength.style.display = 'block';
+        if (txtConfirmarContrasena.value.trim() === '') {
+            contraseñaConfirmLength.classList.remove('show');
+            txtConfirmarContrasena.classList.remove('is-invalid');
+        } else if (txtConfirmarContrasena.value.length < 6) {
+            contraseñaConfirmLength.classList.add('show');
             txtConfirmarContrasena.classList.add('is-invalid');
             isValid = false;
         } else {
-            contraseñaConfirmLength.style.display = 'none';
+            contraseñaConfirmLength.classList.remove('show');
             txtConfirmarContrasena.classList.remove('is-invalid');
         }
     }
@@ -67,15 +73,19 @@ function validatePasswords() {
     let isValid = true;
     
     if (txtContrasena && txtConfirmarContrasena && contraseñaMatch) {
-        if (txtConfirmarContrasena.value !== '' && txtContrasena.value !== '') {
+        // Solo validar si ambos campos tienen contenido
+        if (txtContrasena.value !== '' && txtConfirmarContrasena.value !== '') {
             if (txtContrasena.value !== txtConfirmarContrasena.value) {
-                contraseñaMatch.style.display = 'block';
+                contraseñaMatch.classList.add('show');
                 txtConfirmarContrasena.classList.add('is-invalid');
                 isValid = false;
             } else {
-                contraseñaMatch.style.display = 'none';
+                contraseñaMatch.classList.remove('show');
                 txtConfirmarContrasena.classList.remove('is-invalid');
             }
+        } else {
+            // Si algún campo está vacío, ocultar el error de coincidencia
+            contraseñaMatch.classList.remove('show');
         }
     }
     
@@ -135,14 +145,25 @@ function showEditModal() {
     const modal = document.getElementById('usuarioModal');
     if (modal) {
         modal.style.display = 'block';
-        // Cuando es edición, ocultar el mensaje de confirmar contraseña
-        const hfUsuarioId = document.getElementById('hfUsuarioId');
-        if (hfUsuarioId && hfUsuarioId.value !== '0') {
-            const contraseñaMatch = document.getElementById('contraseñaMatch');
-            if (contraseñaMatch) {
-                contraseñaMatch.style.display = 'none';
-            }
+        // Bloquear scroll del body
+        if (typeof lockBodyScroll === 'function') {
+            lockBodyScroll();
         }
+        // Cuando es edición, ocultar todos los mensajes de error
+        const contraseñaMatch = document.getElementById('contraseñaMatch');
+        const contraseñaLength = document.getElementById('contraseñaLength');
+        const contraseñaConfirmLength = document.getElementById('contraseñaConfirmLength');
+        
+        if (contraseñaMatch) contraseñaMatch.style.display = 'none';
+        if (contraseñaLength) contraseñaLength.style.display = 'none';
+        if (contraseñaConfirmLength) contraseñaConfirmLength.style.display = 'none';
+        
+        // Remover clases de error
+        const txtContrasena = document.getElementById('txtContrasena');
+        const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+        if (txtContrasena) txtContrasena.classList.remove('is-invalid');
+        if (txtConfirmarContrasena) txtConfirmarContrasena.classList.remove('is-invalid');
+        
         // Actualizar estado del botón después de un pequeño delay
         setTimeout(updateGuardarButton, 100);
     }
@@ -153,6 +174,25 @@ function showModal() {
     const modal = document.getElementById('usuarioModal');
     if (modal) {
         modal.style.display = 'block';
+        // Bloquear scroll del body
+        if (typeof lockBodyScroll === 'function') {
+            lockBodyScroll();
+        }
+        // Ocultar todos los mensajes de error
+        const contraseñaMatch = document.getElementById('contraseñaMatch');
+        const contraseñaLength = document.getElementById('contraseñaLength');
+        const contraseñaConfirmLength = document.getElementById('contraseñaConfirmLength');
+        
+        if (contraseñaMatch) contraseñaMatch.style.display = 'none';
+        if (contraseñaLength) contraseñaLength.style.display = 'none';
+        if (contraseñaConfirmLength) contraseñaConfirmLength.style.display = 'none';
+        
+        // Remover clases de error
+        const txtContrasena = document.getElementById('txtContrasena');
+        const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+        if (txtContrasena) txtContrasena.classList.remove('is-invalid');
+        if (txtConfirmarContrasena) txtConfirmarContrasena.classList.remove('is-invalid');
+        
         // Actualizar estado del botón después de un pequeño delay
         setTimeout(updateGuardarButton, 100);
     }
@@ -164,6 +204,10 @@ function closeModal() {
     if (modal) {
         modal.style.display = 'none';
         clearForm();
+        // Liberar scroll del body
+        if (typeof unlockBodyScroll === 'function') {
+            unlockBodyScroll();
+        }
     }
 }
 
@@ -177,15 +221,27 @@ function clearForm() {
     const hfUsuarioId = document.getElementById('hfUsuarioId');
     const modalTitle = document.getElementById('modalTitle');
     const contraseñaMatch = document.getElementById('contraseñaMatch');
+    const contraseñaLength = document.getElementById('contraseñaLength');
+    const contraseñaConfirmLength = document.getElementById('contraseñaConfirmLength');
     
     if (txtNombreUsuario) txtNombreUsuario.value = '';
-    if (txtContrasena) txtContrasena.value = '';
-    if (txtConfirmarContrasena) txtConfirmarContrasena.value = '';
+    if (txtContrasena) {
+        txtContrasena.value = '';
+        txtContrasena.classList.remove('is-invalid');
+    }
+    if (txtConfirmarContrasena) {
+        txtConfirmarContrasena.value = '';
+        txtConfirmarContrasena.classList.remove('is-invalid');
+    }
     if (txtCorreo) txtCorreo.value = '';
     if (ddlRol && ddlRol.options.length > 0) ddlRol.selectedIndex = 0;
     if (hfUsuarioId) hfUsuarioId.value = '0';
     if (modalTitle) modalTitle.innerText = 'Nuevo Usuario';
+    
+    // Ocultar todos los mensajes de error
     if (contraseñaMatch) contraseñaMatch.style.display = 'none';
+    if (contraseñaLength) contraseñaLength.style.display = 'none';
+    if (contraseñaConfirmLength) contraseñaConfirmLength.style.display = 'none';
     
     // Resetear tipo de input a password si hay iconos
     const icon1 = document.getElementById('icon-txtContrasena');
@@ -243,6 +299,7 @@ function confirmDeleteUsuario(button, e) {
 // Función para abrir modal de nuevo usuario
 function openNewUsuarioModal() {
     clearForm();
+    hideAllErrorMessages();
     showModal();
 }
 
@@ -254,8 +311,28 @@ window.addEventListener('click', function(event) {
     }
 });
 
+// Función para ocultar mensajes de error al inicio
+function hideAllErrorMessages() {
+    const contraseñaMatch = document.getElementById('contraseñaMatch');
+    const contraseñaLength = document.getElementById('contraseñaLength');
+    const contraseñaConfirmLength = document.getElementById('contraseñaConfirmLength');
+    
+    if (contraseñaMatch) contraseñaMatch.classList.remove('show');
+    if (contraseñaLength) contraseñaLength.classList.remove('show');
+    if (contraseñaConfirmLength) contraseñaConfirmLength.classList.remove('show');
+    
+    // Remover clases de error
+    const txtContrasena = document.getElementById('txtContrasena');
+    const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');
+    if (txtContrasena) txtContrasena.classList.remove('is-invalid');
+    if (txtConfirmarContrasena) txtConfirmarContrasena.classList.remove('is-invalid');
+}
+
 // Eventos para validar en tiempo real
 document.addEventListener('DOMContentLoaded', function() {
+    // Ocultar mensajes de error al cargar la página
+    hideAllErrorMessages();
+    
     const txtNombreUsuario = document.getElementById('txtNombreUsuario');
     const txtContrasena = document.getElementById('txtContrasena');
     const txtConfirmarContrasena = document.getElementById('txtConfirmarContrasena');

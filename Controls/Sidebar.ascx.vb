@@ -1,6 +1,8 @@
 Imports System.Web.UI
 Imports System.Collections.Generic
 Imports System.Linq
+Imports System.Data
+Imports System.Data.SqlClient
 
 Public Partial Class Controls_Sidebar
     Inherits System.Web.UI.UserControl
