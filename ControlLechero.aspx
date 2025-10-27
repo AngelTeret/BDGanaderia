@@ -7,10 +7,10 @@
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
     <!-- Header de la página -->
     <div class="page-header">
-        <h1 class="page-title">Gestión de Control Lechero</h1>
-        <p class="page-subtitle">Administra los controles de producción lechera de tu explotación</p>
+        <h1 class="page-title">Control Lechero - Fechas</h1>
+        <p class="page-subtitle">Define las fechas de los controles de producción lechera</p>
         <div class="page-actions">
-            <asp:Button ID="btnNuevoControl" runat="server" Text="Nuevo Control" 
+            <asp:Button ID="btnNuevoControl" runat="server" Text="Nueva Fecha de Control" 
                 CssClass="btn btn-primary" OnClientClick="openNewControlModal(); return false;" />
         </div>
     </div>
@@ -18,9 +18,9 @@
     <!-- Tarjeta principal -->
     <div class="stat-card">
         <div class="stat-card-header">
-            <h3 class="stat-card-title">Lista de Controles Lecheros</h3>
+            <h3 class="stat-card-title">Fechas de Controles Lecheros</h3>
         </div>
-        <p class="stat-card-subtitle">Gestiona todos los controles de producción lechera registrados</p>
+        <p class="stat-card-subtitle">Administra las fechas programadas para realizar los controles de producción lechera</p>
         
         <!-- Botón oculto para eliminación -->
         <asp:HiddenField ID="hfControlIdEliminar" runat="server" />
@@ -58,16 +58,16 @@
     <div id="controlModal" class="modal" runat="server">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitle" runat="server">Nuevo Control Lechero</h3>
+                <h3 id="modalTitle" runat="server">Nueva Fecha de Control Lechero</h3>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <asp:HiddenField ID="hfControlId" runat="server" />
                 
                 <div class="form-group">
-                    <label class="form-label">Fecha de Control</label>
+                    <label class="form-label">Fecha Programada</label>
                     <asp:TextBox ID="txtFechaControl" runat="server" CssClass="form-control" 
-                        TextMode="Date" placeholder="Seleccione la fecha del control"></asp:TextBox>
+                        TextMode="Date" placeholder="Seleccione la fecha programada para el control"></asp:TextBox>
                 </div>
             </div>
             <div class="modal-footer">
