@@ -131,7 +131,15 @@ Public Class MenuItemDataAccess
         grupoPersonal.Items.Add(New MenuItem With {.ItemKey = "empleadoCargo", .ItemText = "Asignaciones de Cargos", .ItemUrl = "EmpleadoCargo.aspx", .ItemOrder = 3, .IconCss = "fas fa-user-tag"})
         groupedMenu("personal") = grupoPersonal
         
-        ' Grupo 8: Seguridad
+        ' Grupo 8: Reportes
+        Dim grupoReportes As New MenuGroup With {
+            .GroupKey = "reportes",
+            .GroupTitle = "Reportes"
+        }
+        grupoReportes.Items.Add(New MenuItem With {.ItemKey = "reportes", .ItemText = "Reportes", .ItemUrl = "Reportes.aspx", .ItemOrder = 1, .IconCss = "fas fa-chart-bar"})
+        groupedMenu("reportes") = grupoReportes
+        
+        ' Grupo 9: Seguridad
         ' Tablas: Rol, Usuario
         Dim grupoSeguridad As New MenuGroup With {
             .GroupKey = "seguridad",
