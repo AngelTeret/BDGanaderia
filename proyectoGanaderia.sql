@@ -2433,3 +2433,444 @@ BEGIN
     DELETE FROM Bitacora_Request WHERE Fecha_Inicio < DATEADD(DAY, -@Dias_Retencion, GETDATE());
 END;
 GO
+
+
+
+-- =============================================
+-- Reporte 1: Inventario Completo de Animales
+-- =============================================
+CREATE PROCEDURE Reporte_InventarioAnimales
+    @ID_Raza INT = NULL,
+    @ID_EstadoAnimal INT = NULL,
+    @ID_TipoAnimal INT = NULL,
+    @ID_Categoria INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT DISTINCT
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        CP.Nombre_Categoria,
+        P.Nombre_Potrero,
+        COR.Nombre_Corral
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Categoria AC ON A.ID_Animal = AC.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON AC.ID_Categoria = CP.ID_Categoria
+    LEFT JOIN Animal_Potrero AP ON A.ID_Animal = AP.ID_Animal
+    LEFT JOIN Potrero P ON AP.ID_Potrero = P.ID_Potrero
+    LEFT JOIN Animal_Corral AC2 ON A.ID_Animal = AC2.ID_Animal
+    LEFT JOIN Corral COR ON AC2.ID_Corral = COR.ID_Corral
+    WHERE 
+        (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@ID_EstadoAnimal IS NULL OR A.ID_EstadoAnimal = @ID_EstadoAnimal)
+        AND (@ID_TipoAnimal IS NULL OR A.ID_TipoAnimal = @ID_TipoAnimal)
+        AND (@ID_Categoria IS NULL OR CP.ID_Categoria = @ID_Categoria)
+        AND (@FechaInicio IS NULL OR A.Fecha_Nacimiento >= @FechaInicio)
+        AND (@FechaFin IS NULL OR A.Fecha_Nacimiento <= @FechaFin)
+    ORDER BY A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 2: Producción Lechera Detallada
+-- =============================================
+CREATE PROCEDURE Reporte_ProduccionLechera
+    @ID_Animal INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL,
+    @ID_Periodo INT = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        CL.Fecha_Control,
+        PP.Nombre_Periodo,
+        ACL.Litros_Leche,
+        O.Fecha_Ordeno,
+        ORD.Nombre_Ordenador,
+        O.Turno
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_ControlLechero ACL ON A.ID_Animal = ACL.ID_Animal
+    INNER JOIN Control_Lechero CL ON ACL.ID_Control = CL.ID_Control
+    INNER JOIN Periodo_Produccion PP ON CL.ID_Control = PP.ID_Periodo
+    LEFT JOIN Ordeno O ON CL.Fecha_Control = O.Fecha_Ordeno
+    LEFT JOIN Ordenador ORD ON O.ID_Ordenador = ORD.ID_Ordenador
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR CL.Fecha_Control >= @FechaInicio)
+        AND (@FechaFin IS NULL OR CL.Fecha_Control <= @FechaFin)
+        AND (@ID_Periodo IS NULL OR PP.ID_Periodo = @ID_Periodo)
+    ORDER BY CL.Fecha_Control DESC, A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 3: Historial Completo de Vacunas
+-- =============================================
+CREATE PROCEDURE Reporte_HistorialVacunas
+    @ID_Animal INT = NULL,
+    @ID_Vacuna INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        V.Nombre_Vacuna,
+        AV.Fecha_Aplicacion,
+        CP.Nombre_Categoria AS Categoria
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Categoria AC ON A.ID_Animal = AC.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON AC.ID_Categoria = CP.ID_Categoria
+    INNER JOIN Animal_Vacuna AV ON A.ID_Animal = AV.ID_Animal
+    INNER JOIN Vacuna V ON AV.ID_Vacuna = V.ID_Vacuna
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Vacuna IS NULL OR AV.ID_Vacuna = @ID_Vacuna)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR AV.Fecha_Aplicacion >= @FechaInicio)
+        AND (@FechaFin IS NULL OR AV.Fecha_Aplicacion <= @FechaFin)
+    ORDER BY AV.Fecha_Aplicacion DESC, A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 4: Historial de Tratamientos con Medicamentos
+-- =============================================
+CREATE PROCEDURE Reporte_HistorialTratamientos
+    @ID_Animal INT = NULL,
+    @ID_Veterinario INT = NULL,
+    @ID_Tratamiento INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        TR.Nombre_Tratamiento,
+        VT.Nombre_Veterinario,
+        M.Nombre_Medicamento,
+        TM.Dosis,
+        AT.Fecha_Tratamiento,
+        AT.Observacion
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Tratamiento AT ON A.ID_Animal = AT.ID_Animal
+    INNER JOIN Tratamiento TR ON AT.ID_Tratamiento = TR.ID_Tratamiento
+    INNER JOIN Veterinario VT ON AT.ID_Veterinario = VT.ID_Veterinario
+    INNER JOIN Tratamiento_Medicamento TM ON AT.ID_Tratamiento = TM.ID_Tratamiento
+    INNER JOIN Medicamento M ON TM.ID_Medicamento = M.ID_Medicamento
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Veterinario IS NULL OR AT.ID_Veterinario = @ID_Veterinario)
+        AND (@ID_Tratamiento IS NULL OR AT.ID_Tratamiento = @ID_Tratamiento)
+        AND (@FechaInicio IS NULL OR AT.Fecha_Tratamiento >= @FechaInicio)
+        AND (@FechaFin IS NULL OR AT.Fecha_Tratamiento <= @FechaFin)
+    ORDER BY AT.Fecha_Tratamiento DESC, A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 5: Consumo de Alimentos por Ración
+-- =============================================
+CREATE PROCEDURE Reporte_ConsumoAlimentos
+    @ID_Racion INT = NULL,
+    @ID_Animal INT = NULL,
+    @ID_Alimento INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        RC.Nombre_Racion,
+        AL.Nombre_Alimento,
+        RA.Cantidad AS Cantidad_Racion,
+        CR.Fecha_Consumo,
+        CR.Cantidad AS Cantidad_Consumida,
+        AR.Fecha_Asignacion AS Fecha_Asignacion_Racion,
+        TA.Nombre_Tipo AS Tipo_Alimento
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Racion AR ON A.ID_Animal = AR.ID_Animal
+    INNER JOIN Racion RC ON AR.ID_Racion = RC.ID_Racion
+    INNER JOIN Racion_Alimento RA ON RC.ID_Racion = RA.ID_Racion
+    INNER JOIN Alimento AL ON RA.ID_Alimento = AL.ID_Alimento
+    INNER JOIN Tipo_Alimento TA ON AL.ID_Alimento = TA.ID_TipoAlimento
+    LEFT JOIN Consumo_Registro CR ON A.ID_Animal = CR.ID_Animal AND AL.ID_Alimento = CR.ID_Alimento
+    WHERE 
+        (@ID_Racion IS NULL OR RC.ID_Racion = @ID_Racion)
+        AND (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Alimento IS NULL OR AL.ID_Alimento = @ID_Alimento)
+        AND (@FechaInicio IS NULL OR AR.Fecha_Asignacion >= @FechaInicio)
+        AND (@FechaFin IS NULL OR AR.Fecha_Asignacion <= @FechaFin)
+    ORDER BY AR.Fecha_Asignacion DESC, A.Nombre_Animal, AL.Nombre_Alimento;
+END
+GO
+
+-- =============================================
+-- Reporte 6: Evolución del Pesaje de Animales
+-- =============================================
+CREATE PROCEDURE Reporte_PesajeEvolucion
+    @ID_Animal INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso AS Peso_Actual,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        AP.Fecha_Pesaje,
+        AP.Peso AS Peso_Registrado,
+        CP.Nombre_Categoria
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Pesaje AP ON A.ID_Animal = AP.ID_Animal
+    INNER JOIN Animal_Categoria AC ON A.ID_Animal = AC.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON AC.ID_Categoria = CP.ID_Categoria
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR AP.Fecha_Pesaje >= @FechaInicio)
+        AND (@FechaFin IS NULL OR AP.Fecha_Pesaje <= @FechaFin)
+    ORDER BY A.Nombre_Animal, AP.Fecha_Pesaje;
+END
+GO
+
+-- =============================================
+-- Reporte 7: Animales por Potrero y Corral
+-- =============================================
+CREATE PROCEDURE Reporte_AnimalesUbicacion
+    @ID_Potrero INT = NULL,
+    @ID_Corral INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaConsulta DATE = NULL
+AS
+BEGIN
+    IF @FechaConsulta IS NULL SET @FechaConsulta = GETDATE()
+
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        P.Nombre_Potrero,
+        P.Area AS Area_Potrero,
+        AP.Fecha_Entrada AS Entrada_Potrero,
+        AP.Fecha_Salida AS Salida_Potrero,
+        C.Nombre_Corral,
+        C.Capacidad AS Capacidad_Corral,
+        AC.Fecha_Entrada AS Entrada_Corral,
+        AC.Fecha_Salida AS Salida_Corral,
+        CP.Nombre_Categoria AS Categoria
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Categoria ACat ON A.ID_Animal = ACat.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON ACat.ID_Categoria = CP.ID_Categoria
+    LEFT JOIN Animal_Potrero AP ON A.ID_Animal = AP.ID_Animal
+        AND (@FechaConsulta >= AP.Fecha_Entrada AND (AP.Fecha_Salida IS NULL OR @FechaConsulta <= AP.Fecha_Salida))
+    LEFT JOIN Potrero P ON AP.ID_Potrero = P.ID_Potrero
+    LEFT JOIN Animal_Corral AC ON A.ID_Animal = AC.ID_Animal
+        AND (@FechaConsulta >= AC.Fecha_Entrada AND (AC.Fecha_Salida IS NULL OR @FechaConsulta <= AC.Fecha_Salida))
+    LEFT JOIN Corral C ON AC.ID_Corral = C.ID_Corral
+    WHERE 
+        (@ID_Potrero IS NULL OR P.ID_Potrero = @ID_Potrero)
+        AND (@ID_Corral IS NULL OR C.ID_Corral = @ID_Corral)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+    ORDER BY P.Nombre_Potrero, C.Nombre_Corral, A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 8: Análisis Nutricional y Salud
+-- =============================================
+CREATE PROCEDURE Reporte_AnalisisNutricional
+    @ID_Animal INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso AS Peso_Actual,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        CP.Nombre_Categoria,
+        CN.Fecha_Evaluacion,
+        CN.Condicion_Corporal,
+        RC.Nombre_Racion,
+        AR.Fecha_Asignacion AS Fecha_Asignacion_Racion
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Categoria AC ON A.ID_Animal = AC.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON AC.ID_Categoria = CP.ID_Categoria
+    INNER JOIN Control_Nutricional CN ON A.ID_Animal = CN.ID_Animal
+    LEFT JOIN Animal_Racion AR ON A.ID_Animal = AR.ID_Animal
+    LEFT JOIN Racion RC ON AR.ID_Racion = RC.ID_Racion
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR CN.Fecha_Evaluacion >= @FechaInicio)
+        AND (@FechaFin IS NULL OR CN.Fecha_Evaluacion <= @FechaFin)
+    ORDER BY CN.Fecha_Evaluacion DESC, A.Nombre_Animal;
+END
+GO
+
+-- =============================================
+-- Reporte 9: Rendimiento por Categoría Productiva
+-- =============================================
+CREATE PROCEDURE Reporte_RendimientoCategoria
+    @ID_Categoria INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT 
+        CP.ID_Categoria,
+        CP.Nombre_Categoria,
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        CL.Fecha_Control,
+        ACL.Litros_Leche,
+        V.Nombre_Vacuna,
+        AV.Fecha_Aplicacion
+    FROM Categoria_Productiva CP
+    INNER JOIN Animal_Categoria AC ON CP.ID_Categoria = AC.ID_Categoria
+    INNER JOIN Animal A ON AC.ID_Animal = A.ID_Animal
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_ControlLechero ACL ON A.ID_Animal = ACL.ID_Animal
+    INNER JOIN Control_Lechero CL ON ACL.ID_Control = CL.ID_Control
+    LEFT JOIN Animal_Vacuna AV ON A.ID_Animal = AV.ID_Animal
+    LEFT JOIN Vacuna V ON AV.ID_Vacuna = V.ID_Vacuna
+    WHERE 
+        (@ID_Categoria IS NULL OR CP.ID_Categoria = @ID_Categoria)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR CL.Fecha_Control >= @FechaInicio)
+        AND (@FechaFin IS NULL OR CL.Fecha_Control <= @FechaFin)
+    ORDER BY CP.Nombre_Categoria, A.Nombre_Animal, CL.Fecha_Control;
+END
+GO
+
+-- =============================================
+-- Reporte 10: Registros Sanitarios Completos
+-- =============================================
+CREATE PROCEDURE Reporte_RegistrosSanitarios
+    @ID_Animal INT = NULL,
+    @ID_Raza INT = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL
+AS
+BEGIN
+    SELECT DISTINCT
+        A.ID_Animal,
+        A.Nombre_Animal,
+        A.Fecha_Nacimiento,
+        A.Sexo,
+        A.Peso,
+        R.Nombre_Raza,
+        E.Nombre_Estado AS Estado,
+        T.Nombre_Tipo AS Tipo_Animal,
+        CP.Nombre_Categoria,
+        RS.Fecha_Registro,
+        RS.Descripcion AS Registro_Sanitario,
+        V.Nombre_Vacuna,
+        AV.Fecha_Aplicacion AS Fecha_Vacuna,
+        TR.Nombre_Tratamiento,
+        VT.Nombre_Veterinario,
+        AT.Fecha_Tratamiento
+    FROM Animal A
+    INNER JOIN Raza R ON A.ID_Raza = R.ID_Raza
+    INNER JOIN Estado_Animal E ON A.ID_EstadoAnimal = E.ID_EstadoAnimal
+    INNER JOIN Tipo_Animal T ON A.ID_TipoAnimal = T.ID_TipoAnimal
+    INNER JOIN Animal_Categoria AC ON A.ID_Animal = AC.ID_Animal
+    INNER JOIN Categoria_Productiva CP ON AC.ID_Categoria = CP.ID_Categoria
+    INNER JOIN Registro_Sanitario RS ON A.ID_Animal = RS.ID_Animal
+    LEFT JOIN Animal_Vacuna AV ON A.ID_Animal = AV.ID_Animal
+    LEFT JOIN Vacuna V ON AV.ID_Vacuna = V.ID_Vacuna
+    LEFT JOIN Animal_Tratamiento AT ON A.ID_Animal = AT.ID_Animal
+    LEFT JOIN Tratamiento TR ON AT.ID_Tratamiento = TR.ID_Tratamiento
+    LEFT JOIN Veterinario VT ON AT.ID_Veterinario = VT.ID_Veterinario
+    WHERE 
+        (@ID_Animal IS NULL OR A.ID_Animal = @ID_Animal)
+        AND (@ID_Raza IS NULL OR A.ID_Raza = @ID_Raza)
+        AND (@FechaInicio IS NULL OR RS.Fecha_Registro >= @FechaInicio)
+        AND (@FechaFin IS NULL OR RS.Fecha_Registro <= @FechaFin)
+    ORDER BY RS.Fecha_Registro DESC, A.Nombre_Animal;
+END
+GO

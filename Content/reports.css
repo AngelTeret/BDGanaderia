@@ -1,0 +1,278 @@
+/* ==========================================
+   ESTILOS PARA MÓDULO DE REPORTES
+   Prefijo: .rep- - Aislados del resto del sitio
+   ========================================== */
+
+.rep-container {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.rep-header {
+    margin-bottom: 30px;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 15px;
+}
+
+.rep-title {
+    font-size: 32px;
+    color: #2c3e50;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rep-controls {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.rep-select-wrapper {
+    margin-bottom: 0;
+}
+
+.rep-label {
+    display: block;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 12px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rep-select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #f8f9fa;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.rep-select:hover {
+    border-color: #3498db;
+    background: white;
+}
+
+.rep-select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.rep-filters {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.rep-filter-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.rep-filter-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.rep-filter-item label {
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.rep-filter-item input,
+.rep-filter-item select {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.3s;
+}
+
+.rep-filter-item input:hover,
+.rep-filter-item select:hover {
+    border-color: #3498db;
+}
+
+.rep-filter-item input:focus,
+.rep-filter-item select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.rep-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.rep-btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rep-btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.rep-btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.rep-btn-success {
+    background: #27ae60;
+    color: white;
+}
+
+.rep-btn-success:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.rep-preview {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+}
+
+.rep-loader {
+    text-align: center;
+    padding: 50px;
+    color: #555;
+    font-size: 18px;
+}
+
+.rep-content {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.rep-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    min-width: 100%;
+}
+
+.rep-table thead {
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.rep-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #1a252f;
+}
+
+.rep-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.rep-table tbody tr {
+    transition: all 0.2s;
+}
+
+.rep-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.rep-table tbody tr:hover {
+    background: #e3f2fd;
+    transform: scale(1.01);
+}
+
+.rep-error {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+    font-weight: 500;
+}
+
+.rep-info {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+    font-weight: 500;
+}
+
+/* Scrollbar personalizado para tablas */
+.rep-content::-webkit-scrollbar {
+    height: 10px;
+}
+
+.rep-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.rep-content::-webkit-scrollbar-thumb {
+    background: #34495e;
+    border-radius: 5px;
+}
+
+.rep-content::-webkit-scrollbar-thumb:hover {
+    background: #2c3e50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rep-filter-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .rep-actions {
+        flex-direction: column;
+    }
+    
+    .rep-btn {
+        width: 100%;
+    }
+}
