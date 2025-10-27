@@ -119,6 +119,15 @@ Partial Public Class Tratamiento
 
     Private Sub EliminarTratamiento(tratamientoId As Integer)
         Try
+            ' Obtener nombre antes de eliminar
+            Dim nombreTratamiento As String = ""
+            Try
+                Dim queryNombre As String = "SELECT Nombre_Tratamiento FROM Tratamiento WHERE ID_Tratamiento = @ID_Tratamiento"
+                Dim nombreObj As Object = DataAccess.ExecuteScalar(queryNombre, New SqlParameter() {New SqlParameter("@ID_Tratamiento", tratamientoId)})
+                If nombreObj IsNot Nothing Then nombreTratamiento = nombreObj.ToString()
+            Catch
+            End Try
+            
             ' Usar procedimiento almacenado para eliminar
             Dim query As String = "EXEC EliminarTratamiento @ID_Tratamiento"
             Dim parameters() As SqlParameter = {
@@ -127,12 +136,22 @@ Partial Public Class Tratamiento
             
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarEliminar("Tratamiento", tratamientoId.ToString(), "Nombre: " & nombreTratamiento)
+                Catch
+                End Try
+                
                 MostrarAlerta("Tratamiento eliminado correctamente", "success")
                 CargarTratamientos()
             Else
                 MostrarAlerta("Error al eliminar el tratamiento", "danger")
             End If
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Tratamiento.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al eliminar el tratamiento: " & ex.Message, "danger")
         End Try
     End Sub
@@ -159,8 +178,22 @@ Partial Public Class Tratamiento
                 New SqlParameter("@Nombre_Tratamiento", nombreTratamiento)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarCrear("Tratamiento", nuevoId.ToString(), "Nombre: " & nombreTratamiento)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Tratamiento.aspx")
+            Catch
+            End Try
             Throw New Exception("Error al insertar el tratamiento: " & ex.Message)
         End Try
     End Function
@@ -174,8 +207,22 @@ Partial Public Class Tratamiento
                 New SqlParameter("@Nombre_Tratamiento", nombreTratamiento)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarActualizar("Tratamiento", tratamientoId.ToString(), "Nombre: " & nombreTratamiento)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Tratamiento.aspx")
+            Catch
+            End Try
             Throw ex
         End Try
     End Function

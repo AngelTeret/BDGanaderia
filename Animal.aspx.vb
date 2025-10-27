@@ -213,6 +213,11 @@ Partial Public Class Animal
                     EliminarAnimal(animalId)
             End Select
         Catch ex As Exception
+            ' Registrar error en bitácora
+            Try
+                BitacoraHelper.RegistrarError(ex, "Animal.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al procesar la acción: " & ex.Message, "danger")
         End Try
     End Sub
@@ -257,14 +262,36 @@ Partial Public Class Animal
                 
                 modalTitle.InnerText = "Editar Animal"
                 animalModal.Style("display") = "block"
+                
+                ' Forzar el scroll y asegurar que el modal sea visible
+                Dim script As String = "setTimeout(function(){ document.getElementById('animalModal').style.display = 'block'; }, 100);"
+                ClientScript.RegisterStartupScript(Me.GetType(), "OpenModal", script, True)
             End If
         Catch ex As Exception
+            ' Registrar error en bitácora
+            Try
+                BitacoraHelper.RegistrarError(ex, "Animal.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al cargar los datos del animal: " & ex.Message, "danger")
         End Try
     End Sub
 
     Private Sub EliminarAnimal(animalId As Integer)
         Try
+            ' Obtener nombre del animal antes de eliminar
+            Dim nombreAnimal As String = ""
+            Try
+                Dim queryNombre As String = "SELECT Nombre_Animal FROM Animal WHERE ID_Animal = @ID_Animal"
+                Dim paramsNombre() As SqlParameter = {
+                    New SqlParameter("@ID_Animal", animalId)
+                }
+                Dim nombreObj As Object = DataAccess.ExecuteScalar(queryNombre, paramsNombre)
+                If nombreObj IsNot Nothing Then nombreAnimal = nombreObj.ToString()
+            Catch
+            End Try
+            
+            ' Eliminar el animal
             Dim query As String = "EXEC EliminarAnimal @ID_Animal"
             Dim parameters() As SqlParameter = {
                 New SqlParameter("@ID_Animal", animalId)
@@ -272,12 +299,22 @@ Partial Public Class Animal
             
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarEliminar("Animal", animalId.ToString(), "Nombre: " & nombreAnimal)
+                Catch
+                End Try
+                
                 MostrarAlerta("Animal eliminado correctamente", "success")
                 CargarAnimales()
             Else
                 MostrarAlerta("Error al eliminar el animal", "danger")
             End If
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Animal.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al eliminar el animal: " & ex.Message, "danger")
         End Try
     End Sub
@@ -317,8 +354,22 @@ Partial Public Class Animal
                 New SqlParameter("@ID_EstadoAnimal", idEstadoAnimal)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarCrear("Animal", nuevoId.ToString(), "Nombre: " & nombreAnimal)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Animal.aspx")
+            Catch
+            End Try
             Throw New Exception("Error al insertar el animal: " & ex.Message)
         End Try
     End Function
@@ -344,8 +395,22 @@ Partial Public Class Animal
                 New SqlParameter("@ID_EstadoAnimal", idEstadoAnimal)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarActualizar("Animal", animalId.ToString(), "Nombre: " & nombreAnimal)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Animal.aspx")
+            Catch
+            End Try
             Throw ex
         End Try
     End Function

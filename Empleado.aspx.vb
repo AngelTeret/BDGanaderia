@@ -132,6 +132,15 @@ Partial Public Class Empleado
 
     Private Sub EliminarEmpleado(empleadoId As Integer)
         Try
+            ' Obtener nombre antes de eliminar
+            Dim nombreEmpleado As String = ""
+            Try
+                Dim queryNombre As String = "SELECT Nombre_Empleado FROM Empleado WHERE ID_Empleado = @ID_Empleado"
+                Dim nombreObj As Object = DataAccess.ExecuteScalar(queryNombre, New SqlParameter() {New SqlParameter("@ID_Empleado", empleadoId)})
+                If nombreObj IsNot Nothing Then nombreEmpleado = nombreObj.ToString()
+            Catch
+            End Try
+            
             ' Usar procedimiento almacenado para eliminar
             Dim query As String = "EXEC EliminarEmpleado @ID_Empleado"
             Dim parameters() As SqlParameter = {
@@ -140,12 +149,22 @@ Partial Public Class Empleado
             
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarEliminar("Empleado", empleadoId.ToString(), "Nombre: " & nombreEmpleado)
+                Catch
+                End Try
+                
                 MostrarAlerta("Empleado eliminado correctamente", "success")
                 CargarEmpleados()
             Else
                 MostrarAlerta("Error al eliminar el empleado", "danger")
             End If
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Empleado.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al eliminar el empleado: " & ex.Message, "danger")
         End Try
     End Sub
@@ -183,8 +202,22 @@ Partial Public Class Empleado
                 }
             End If
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarCrear("Empleado", nuevoId.ToString(), "Nombre: " & nombreEmpleado)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Empleado.aspx")
+            Catch
+            End Try
             Throw New Exception("Error al insertar el empleado: " & ex.Message)
         End Try
     End Function
@@ -209,8 +242,22 @@ Partial Public Class Empleado
                 }
             End If
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarActualizar("Empleado", empleadoId.ToString(), "Nombre: " & nombreEmpleado)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Empleado.aspx")
+            Catch
+            End Try
             Throw ex
         End Try
     End Function

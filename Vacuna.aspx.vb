@@ -119,6 +119,15 @@ Partial Public Class Vacuna
 
     Private Sub EliminarVacuna(vacunaId As Integer)
         Try
+            ' Obtener nombre antes de eliminar
+            Dim nombreVacuna As String = ""
+            Try
+                Dim queryNombre As String = "SELECT Nombre_Vacuna FROM Vacuna WHERE ID_Vacuna = @ID_Vacuna"
+                Dim nombreObj As Object = DataAccess.ExecuteScalar(queryNombre, New SqlParameter() {New SqlParameter("@ID_Vacuna", vacunaId)})
+                If nombreObj IsNot Nothing Then nombreVacuna = nombreObj.ToString()
+            Catch
+            End Try
+            
             ' Usar procedimiento almacenado para eliminar
             Dim query As String = "EXEC EliminarVacuna @ID_Vacuna"
             Dim parameters() As SqlParameter = {
@@ -127,12 +136,22 @@ Partial Public Class Vacuna
             
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarEliminar("Vacuna", vacunaId.ToString(), "Nombre: " & nombreVacuna)
+                Catch
+                End Try
+                
                 MostrarAlerta("Vacuna eliminada correctamente", "success")
                 CargarVacunas()
             Else
                 MostrarAlerta("Error al eliminar la vacuna", "danger")
             End If
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Vacuna.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al eliminar la vacuna: " & ex.Message, "danger")
         End Try
     End Sub
@@ -159,8 +178,22 @@ Partial Public Class Vacuna
                 New SqlParameter("@Nombre_Vacuna", nombreVacuna)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarCrear("Vacuna", nuevoId.ToString(), "Nombre: " & nombreVacuna)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Vacuna.aspx")
+            Catch
+            End Try
             Throw New Exception("Error al insertar la vacuna: " & ex.Message)
         End Try
     End Function
@@ -174,8 +207,22 @@ Partial Public Class Vacuna
                 New SqlParameter("@Nombre_Vacuna", nombreVacuna)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarActualizar("Vacuna", vacunaId.ToString(), "Nombre: " & nombreVacuna)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Vacuna.aspx")
+            Catch
+            End Try
             Throw ex
         End Try
     End Function

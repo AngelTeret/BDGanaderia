@@ -269,6 +269,46 @@ CREATE TABLE Usuario (
     ID_Rol INT NOT NULL
 );
 
+-- TABLAS DE AUDITORIA Y BITACORA
+CREATE TABLE Bitacora_Evento (
+    ID_Bitacora INT IDENTITY(1,1) PRIMARY KEY,
+    Fecha_Hora DATETIME NOT NULL DEFAULT GETDATE(),
+    ID_Usuario INT NULL,
+    Nombre_Usuario VARCHAR(100) NULL,
+    Tipo_Evento VARCHAR(50) NOT NULL,
+    Entidad VARCHAR(100) NULL,
+    ID_Registro VARCHAR(200) NULL,
+    Valores_Antes VARCHAR(MAX) NULL,
+    Valores_Nuevos VARCHAR(MAX) NULL,
+    Mensaje VARCHAR(4000) NULL,
+    IP_Usuario VARCHAR(45) NULL
+);
+
+CREATE TABLE Bitacora_Error (
+    ID_Error INT IDENTITY(1,1) PRIMARY KEY,
+    Fecha_Hora DATETIME NOT NULL DEFAULT GETDATE(),
+    ID_Usuario INT NULL,
+    Nombre_Usuario VARCHAR(100) NULL,
+    Tipo_Error VARCHAR(200) NOT NULL,
+    Mensaje VARCHAR(4000) NOT NULL,
+    Detalle_Error VARCHAR(MAX) NULL,
+    Pagina VARCHAR(300) NULL,
+    IP_Usuario VARCHAR(45) NULL
+);
+
+CREATE TABLE Bitacora_Request (
+    ID_Request INT IDENTITY(1,1) PRIMARY KEY,
+    Fecha_Inicio DATETIME NOT NULL,
+    Fecha_Fin DATETIME NULL,
+    Ruta VARCHAR(300) NOT NULL,
+    Query_String VARCHAR(1000) NULL,
+    Codigo_Estado INT NULL,
+    ID_Usuario INT NULL,
+    Nombre_Usuario VARCHAR(100) NULL,
+    IP_Usuario VARCHAR(45) NULL,
+    Tiempo_Ms INT NULL
+);
+
 
 -- LLAVES FORANEAS (ALTER TABLE)
 
@@ -296,7 +336,7 @@ ALTER TABLE Animal_Categoria
 ADD CONSTRAINT FK_AnimalCategoria_Categoria
 FOREIGN KEY (ID_Categoria) REFERENCES Categoria_Productiva(ID_Categoria);
 
--- Alimentaci�n
+-- Alimentación
 ALTER TABLE Racion_Alimento
 ADD CONSTRAINT FK_RacionAlimento_Racion
 FOREIGN KEY (ID_Racion) REFERENCES Racion(ID_Racion);
@@ -379,7 +419,7 @@ ALTER TABLE Control_Ambiental
 ADD CONSTRAINT FK_ControlAmb_Potrero
 FOREIGN KEY (ID_Potrero) REFERENCES Potrero(ID_Potrero);
 
--- Producci�n lechera
+-- Producción lechera
 ALTER TABLE Ordeno
 ADD CONSTRAINT FK_Ordeno_Ordenador
 FOREIGN KEY (ID_Ordenador) REFERENCES Ordenador(ID_Ordenador);
@@ -405,6 +445,19 @@ FOREIGN KEY (ID_Corral) REFERENCES Corral(ID_Corral);
 ALTER TABLE Usuario
 ADD CONSTRAINT FK_Usuario_Rol
 FOREIGN KEY (ID_Rol) REFERENCES Rol(ID_Rol);
+
+-- Auditoria 
+ALTER TABLE Bitacora_Evento
+ADD CONSTRAINT FK_BitacoraEvento_Usuario
+FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario);
+
+ALTER TABLE Bitacora_Error
+ADD CONSTRAINT FK_BitacoraError_Usuario
+FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario);
+
+ALTER TABLE Bitacora_Request
+ADD CONSTRAINT FK_BitacoraRequest_Usuario
+FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario);
 
 GO
 -- 1. Raza
@@ -2277,3 +2330,106 @@ BEGIN
 END;
 GO
 
+-- =========================================
+-- PROCEDIMIENTOS DE BITACORA 
+-- =========================================
+
+
+CREATE PROCEDURE InsertarBitacoraEvento
+    @ID_Usuario INT,
+    @Nombre_Usuario VARCHAR(100),
+    @Tipo_Evento VARCHAR(50),
+    @Entidad VARCHAR(100),
+    @ID_Registro VARCHAR(200),
+    @Valores_Antes VARCHAR(MAX),
+    @Valores_Nuevos VARCHAR(MAX),
+    @Mensaje VARCHAR(4000),
+    @IP_Usuario VARCHAR(45)
+AS
+BEGIN
+    INSERT INTO Bitacora_Evento (ID_Usuario, Nombre_Usuario, Tipo_Evento, Entidad, ID_Registro, Valores_Antes, Valores_Nuevos, Mensaje, IP_Usuario)
+    VALUES (@ID_Usuario, @Nombre_Usuario, @Tipo_Evento, @Entidad, @ID_Registro, @Valores_Antes, @Valores_Nuevos, @Mensaje, @IP_Usuario);
+    SELECT IDENT_CURRENT('Bitacora_Evento') AS ID_Bitacora;
+END;
+GO
+
+
+CREATE PROCEDURE InsertarBitacoraError
+    @ID_Usuario INT,
+    @Nombre_Usuario VARCHAR(100),
+    @Tipo_Error VARCHAR(200),
+    @Mensaje VARCHAR(4000),
+    @Detalle_Error VARCHAR(MAX),
+    @Pagina VARCHAR(300),
+    @IP_Usuario VARCHAR(45)
+AS
+BEGIN
+    INSERT INTO Bitacora_Error (ID_Usuario, Nombre_Usuario, Tipo_Error, Mensaje, Detalle_Error, Pagina, IP_Usuario)
+    VALUES (@ID_Usuario, @Nombre_Usuario, @Tipo_Error, @Mensaje, @Detalle_Error, @Pagina, @IP_Usuario);
+    SELECT IDENT_CURRENT('Bitacora_Error') AS ID_Error;
+END;
+GO
+
+
+CREATE PROCEDURE InsertarBitacoraRequest
+    @Ruta VARCHAR(300),
+    @Query_String VARCHAR(1000),
+    @ID_Usuario INT,
+    @Nombre_Usuario VARCHAR(100),
+    @IP_Usuario VARCHAR(45)
+AS
+BEGIN
+    INSERT INTO Bitacora_Request (Fecha_Inicio, Ruta, Query_String, ID_Usuario, Nombre_Usuario, IP_Usuario)
+    VALUES (GETDATE(), @Ruta, @Query_String, @ID_Usuario, @Nombre_Usuario, @IP_Usuario);
+    SELECT IDENT_CURRENT('Bitacora_Request') AS ID_Request;
+END;
+GO
+
+
+CREATE PROCEDURE ActualizarBitacoraRequest
+    @ID_Request INT,
+    @Codigo_Estado INT
+AS
+BEGIN
+    UPDATE Bitacora_Request
+    SET Fecha_Fin = GETDATE(),
+        Codigo_Estado = @Codigo_Estado,
+        Tiempo_Ms = DATEDIFF(MILLISECOND, Fecha_Inicio, GETDATE())
+    WHERE ID_Request = @ID_Request;
+END;
+GO
+
+
+CREATE PROCEDURE ListarBitacoraEvento
+AS
+BEGIN
+    SELECT TOP 100 * FROM Bitacora_Evento ORDER BY Fecha_Hora DESC;
+END;
+GO
+
+
+CREATE PROCEDURE ListarBitacoraError
+AS
+BEGIN
+    SELECT TOP 100 * FROM Bitacora_Error ORDER BY Fecha_Hora DESC;
+END;
+GO
+
+
+CREATE PROCEDURE ListarBitacoraRequest
+AS
+BEGIN
+    SELECT TOP 100 * FROM Bitacora_Request ORDER BY Fecha_Inicio DESC;
+END;
+GO
+
+
+CREATE PROCEDURE LimpiarBitacoraAntigua
+    @Dias_Retencion INT
+AS
+BEGIN
+    DELETE FROM Bitacora_Evento WHERE Fecha_Hora < DATEADD(DAY, -@Dias_Retencion, GETDATE());
+    DELETE FROM Bitacora_Error WHERE Fecha_Hora < DATEADD(DAY, -@Dias_Retencion, GETDATE());
+    DELETE FROM Bitacora_Request WHERE Fecha_Inicio < DATEADD(DAY, -@Dias_Retencion, GETDATE());
+END;
+GO

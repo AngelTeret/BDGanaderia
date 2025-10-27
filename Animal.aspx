@@ -47,7 +47,7 @@
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server" Text="Editar" 
                                         CommandName="EditarAnimal" CommandArgument='<%# Eval("ID_Animal") %>'
-                                        CssClass="btn btn-warning" />
+                                        CssClass="btn btn-warning" OnClientClick="return true;" />
                                     <asp:LinkButton ID="btnEliminar" runat="server" Text="Eliminar" 
                                         CommandName="EliminarAnimal" CommandArgument='<%# Eval("ID_Animal") %>'
                                         CssClass="btn btn-danger"
@@ -93,7 +93,7 @@
                         <div class="form-group">
                             <label class="form-label">Peso (kg)</label>
                             <asp:TextBox ID="txtPeso" runat="server" CssClass="form-control" 
-                                placeholder="Ingrese el peso (ej: 120.5)" type="text" pattern="[0-9]+\.?[0-9]*"></asp:TextBox>
+                                placeholder="Ingrese el peso (ej: 120.5 o 123,2)" type="text"></asp:TextBox>
                         </div>
                         
                         <div class="form-group">

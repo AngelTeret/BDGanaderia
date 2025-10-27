@@ -188,8 +188,25 @@ Partial Public Class Usuario
                 New SqlParameter("@ID_Usuario", usuarioId)
             }
             
+            ' Obtener datos del usuario antes de eliminarlo
+            Dim queryUsuario As String = "SELECT Nombre_Usuario FROM Usuario WHERE ID_Usuario = @ID_Usuario"
+            Dim paramsUsuario() As SqlParameter = {New SqlParameter("@ID_Usuario", usuarioId)}
+            Dim nombreUsuario As String = ""
+            Try
+                Dim nombre As Object = DataAccess.ExecuteScalar(queryUsuario, paramsUsuario)
+                If nombre IsNot Nothing Then nombreUsuario = nombre.ToString()
+            Catch
+            End Try
+            
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraEvento.RegistrarEventoConEntidad("DELETE", "Usuario", usuarioId.ToString(), "Nombre: " & nombreUsuario, Nothing, "Se eliminó usuario: " & nombreUsuario)
+                Catch
+                    ' Ignorar errores de bitácora
+                End Try
+                
                 MostrarAlerta("Usuario eliminado correctamente", "success")
                 CargarUsuarios()
             Else
@@ -225,7 +242,18 @@ Partial Public Class Usuario
                 New SqlParameter("@ID_Rol", rolId)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraEvento.RegistrarEventoConEntidad("CREATE", "Usuario", nuevoId.ToString(), Nothing, "Nombre: " & nombreUsuario & ", Email: " & correo, "Se creó nuevo usuario: " & nombreUsuario)
+                Catch
+                    ' Ignorar errores de bitácora
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
             Throw New Exception("Error al insertar el usuario: " & ex.Message)
         End Try
@@ -259,7 +287,18 @@ Partial Public Class Usuario
                 New SqlParameter("@ID_Rol", rolId)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If result > 0 Then
+                Try
+                    BitacoraEvento.RegistrarEventoConEntidad("UPDATE", "Usuario", usuarioId.ToString(), "Datos anteriores", "Nombre: " & nombreUsuario & ", Email: " & correo, "Se actualizó usuario ID: " & usuarioId.ToString())
+                Catch
+                    ' Ignorar errores de bitácora
+                End Try
+            End If
+            
+            Return result
         Catch ex As Exception
             Throw ex
         End Try
