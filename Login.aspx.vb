@@ -39,6 +39,12 @@ Partial Public Class Login
                 ' Iniciar sesión
                 SimpleAuthService.SignIn(authResult.UserId, username, authResult.RoleName, rememberMe)
                 
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarLogin(username, True, "Usuario inició sesión exitosamente", authResult.UserId)
+                Catch
+                End Try
+                
                 ' Redirigir
                 Dim returnUrl As String = Request.QueryString("ReturnUrl")
                 
@@ -49,6 +55,12 @@ Partial Public Class Login
                     Response.Redirect("~/Default.aspx", True)
                 End If
             Else
+                ' Registrar intento fallido en bitácora
+                Try
+                    BitacoraHelper.RegistrarLogin(username, False, "Intento de login fallido - usuario o contraseña incorrectos")
+                Catch
+                End Try
+                
                 ShowError("Usuario o contraseña incorrectos")
             End If
             

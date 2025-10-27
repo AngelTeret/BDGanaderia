@@ -602,6 +602,31 @@ body {
     border-bottom: none;
 }
 
+/* Estabilizar tablas - Evitar vibración al pasar mouse sobre scrollbar */
+.table-container {
+    scrollbar-gutter: stable;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Customizar scrollbar para todas las tablas */
+.table-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.table-container::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #bdc3c7;
+    border-radius: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background-color: #95a5a6;
+}
+
 /* Botones en tabla */
 .table .btn {
     margin-right: 5px;
@@ -636,6 +661,21 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+/* Modal más pequeño cuando solo tiene un campo */
+.modal-content:has(.form-group:only-of-type) {
+    max-width: 400px;
+    width: 85%;
+}
+
+.modal-body:has(.form-group:only-of-type) {
+    padding: 20px !important;
+}
+
+.modal-content:has(.form-group:only-of-type) .modal-footer {
+    padding: 15px 20px !important;
+    margin-top: 0 !important;
 }
 
 .modal-header {

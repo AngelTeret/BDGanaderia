@@ -119,6 +119,15 @@ Partial Public Class Raza
 
     Private Sub EliminarRaza(razaId As Integer)
         Try
+            ' Obtener nombre antes de eliminar
+            Dim nombreRaza As String = ""
+            Try
+                Dim queryNombre As String = "SELECT Nombre_Raza FROM Raza WHERE ID_Raza = @RazaId"
+                Dim nombreObj As Object = DataAccess.ExecuteScalar(queryNombre, New SqlParameter() {New SqlParameter("@RazaId", razaId)})
+                If nombreObj IsNot Nothing Then nombreRaza = nombreObj.ToString()
+            Catch
+            End Try
+            
             Dim query As String = "DELETE FROM Raza WHERE ID_Raza = @RazaId"
             Dim parameters() As SqlParameter = {
                 New SqlParameter("@RazaId", razaId)
@@ -126,12 +135,22 @@ Partial Public Class Raza
             
             Dim result As Integer = DataAccess.ExecuteNonQuery(query, parameters)
             If result > 0 Then
+                ' Registrar en bitácora
+                Try
+                    BitacoraHelper.RegistrarEliminar("Raza", razaId.ToString(), "Nombre: " & nombreRaza)
+                Catch
+                End Try
+                
                 MostrarAlerta("Raza eliminada correctamente", "success")
                 CargarRazas()
             Else
                 MostrarAlerta("Error al eliminar la raza", "danger")
             End If
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Raza.aspx")
+            Catch
+            End Try
             MostrarAlerta("Error al eliminar la raza: " & ex.Message, "danger")
         End Try
     End Sub
@@ -157,8 +176,22 @@ Partial Public Class Raza
                 New SqlParameter("@Nombre_Raza", nombreRaza)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarCrear("Raza", nuevoId.ToString(), "Nombre: " & nombreRaza)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Raza.aspx")
+            Catch
+            End Try
             Throw New Exception("Error al insertar la raza: " & ex.Message)
         End Try
     End Function
@@ -171,8 +204,22 @@ Partial Public Class Raza
                 New SqlParameter("@Nombre_Raza", nombreRaza)
             }
             
-            Return DataAccess.ExecuteNonQuery(query, parameters)
+            Dim resultado As Integer = DataAccess.ExecuteNonQuery(query, parameters)
+            
+            ' Registrar en bitácora
+            If resultado > 0 Then
+                Try
+                    BitacoraHelper.RegistrarActualizar("Raza", razaId.ToString(), "Nombre: " & nombreRaza)
+                Catch
+                End Try
+            End If
+            
+            Return resultado
         Catch ex As Exception
+            Try
+                BitacoraHelper.RegistrarError(ex, "Raza.aspx")
+            Catch
+            End Try
             Throw ex
         End Try
     End Function
